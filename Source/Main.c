@@ -13,16 +13,16 @@
 /* This is the main file for ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls. */
 
 #include <unistd.h>
-#include <GLFW/glfw3.h>
+#include "SDL.h"
+#include <stdlib.h>
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv){
-	if (!glfwInit())
-		return 1;
-	GLFWwindow * window = glfwCreateWindow(640, 480, "ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls", NULL, NULL);
-	if (window == NULL)
-		return 1;
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	atexit(SDL_Quit);
+	SDL_Window * window = SDL_CreateWindow("ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
 	sleep(5);
-	glfwDestroyWindow(window);
-	glfwTerminate();
+	SDL_DestroyWindow(window);
+	SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	SDL_Quit();
 	return 0;
 }

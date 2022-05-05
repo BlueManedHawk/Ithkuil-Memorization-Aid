@@ -1,2 +1,2 @@
-*.o
+Source/*.o
 *.elf
