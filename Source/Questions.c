@@ -11,12 +11,16 @@
  * This software comes with no warranty, implied or explicit.  The author disclaims any liability for damages caused by this software. */
 
 /* This file deals with the questions portion of ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls. */
-#include "SDL.h"
 
-void questions_handle_events([[maybe_unused]] SDL_Event e)
+#include "SDL.h"
+#include "Questions.h"
+
+struct questions_info questions_handle_events([[maybe_unused]] SDL_Event e)
 {
+	struct questions_info q = {0};
+	return q;
 }
 
-void questions_render([[maybe_unused]] SDL_Renderer * renderer)
+void questions_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct questions_info questions_info)
 {
 }

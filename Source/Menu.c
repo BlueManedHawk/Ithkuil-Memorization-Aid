@@ -13,11 +13,14 @@
 /* This file handles the main menu for ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls. */
 
 #include "SDL.h"
+#include "Menu.h"
 
-void menu_handle_events([[maybe_unused]] SDL_Event e)
+struct menu_info menu_handle_events([[maybe_unused]] SDL_Event e)
 {
+	struct menu_info m = {0};
+	return m;
 }
 
-void menu_render([[maybe_unused]] SDL_Renderer * renderer)
+void menu_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct menu_info menu_info)
 {
 }

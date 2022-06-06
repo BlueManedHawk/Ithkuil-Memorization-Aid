@@ -20,7 +20,7 @@ endif
 CC = clang-13
 CFLAGS = -Wall -Werror -Wextra -pedantic
 CFLAGS += -std=c2x -Og -glldb ` sdl2-config --cflags `
-LDFLAGS = ` sdl2-config --libs `
+LDFLAGS = ` sdl2-config --libs ` -lSDL2_ttf
 SRC = $(wildcard Source/*.c)
 OBJ = $(SRC:.c=.o)
 

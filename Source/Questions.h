@@ -13,7 +13,14 @@
 #ifndef QUESTIONS_H
 #define QUESTIONS_H
 
-extern void questions_handle_events(SDL_Event);
-extern void questions_render(SDL_Renderer *);
+#include "SDL.h"
+#include <stdbool.h>
+
+struct questions_info {
+	bool quit;
+};
+
+extern struct questions_info questions_handle_events(SDL_Event);
+extern void questions_render(SDL_Renderer *, struct questions_info);
 
 #endif

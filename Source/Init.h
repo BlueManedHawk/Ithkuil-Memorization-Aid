@@ -1,5 +1,4 @@
 /* LICENSE
- *
  * Copyright © 2022 Blue-Maned_Hawk.  All rights reserved.
  *
  * This project should have come with a file called `LICENSE`.  In the event of any conflict between this comment and that file, that file shall be considered the authority.
@@ -10,16 +9,16 @@
  *
  * This software comes with no warranty, implied or explicit.  The author disclaims any liability for damages caused by this software. */
 
-#ifndef MENU_H
-#define MENU_H
+#ifndef INIT_H
+#define INIT_H
 
-#include <stdbool.h>
+#include "SDL2/SDL_ttf.h"
 
-struct menu_info {
-	bool quit;
+struct assets {
+	TTF_Font * barlow_condensed;
 };
 
-extern struct menu_info menu_handle_events (SDL_Event);
-extern void menu_render(SDL_Renderer *, struct menu_info);
+extern struct assets load_assets(void);
+extern void unload_assets(struct assets);
 
 #endif

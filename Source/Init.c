@@ -1,5 +1,4 @@
 /* LICENSE
- *
  * Copyright © 2022 Blue-Maned_Hawk.  All rights reserved.
  *
  * This project should have come with a file called `LICENSE`.  In the event of any conflict between this comment and that file, that file shall be considered the authority.
@@ -10,16 +9,31 @@
  *
  * This software comes with no warranty, implied or explicit.  The author disclaims any liability for damages caused by this software. */
 
-#ifndef MENU_H
-#define MENU_H
+/* This file contains subroutines used in the initialization and deinitialization of the software. */
 
-#include <stdbool.h>
+#include "Init.h"
+#include <stdio.h>
+#include <dirent.h>
+#include <stdlib.h>
 
-struct menu_info {
-	bool quit;
-};
+struct assets load_assets(void)
+{
+	DIR * dir = opendir("./Assets");
+	if (dir == NULL) goto fail;
 
-extern struct menu_info menu_handle_events (SDL_Event);
-extern void menu_render(SDL_Renderer *, struct menu_info);
+	struct assets assets = {0};
+	assets.barlow_condensed = TTF_OpenFont("./Assets/BarlowCondensed-Regular.ttf", 12);
+	if (assets.barlow_condensed == NULL) goto fail;
 
-#endif
+	return assets;
+
+fail:
+	printf("\033[31mThe program's assets could not be loaded and the program will now exit.  Apologies for the inconvenience.\033[0m\n");
+	exit(EXIT_FAILURE);
+
+}
+
+void unload_assets(struct assets assets)
+{
+	TTF_CloseFont(assets.barlow_condensed);
+}
