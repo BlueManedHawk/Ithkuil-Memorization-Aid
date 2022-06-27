@@ -14,6 +14,7 @@
 
 #include "SDL.h"
 #include "Questions.h"
+#include "Init.h"
 
 struct questions_info questions_handle_events([[maybe_unused]] SDL_Event e)
 {
@@ -21,6 +22,6 @@ struct questions_info questions_handle_events([[maybe_unused]] SDL_Event e)
 	return q;
 }
 
-void questions_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct questions_info questions_info)
+void questions_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct questions_info questions_info, [[maybe_unused]] struct assets assets)
 {
 }

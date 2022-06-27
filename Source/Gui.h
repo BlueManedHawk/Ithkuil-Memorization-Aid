@@ -10,18 +10,18 @@
  *
  * This software comes with no warranty, implied or explicit.  The author disclaims any liability for damages caused by this software. */
 
-#ifndef QUESTIONS_H
-#define QUESTIONS_H
+#ifndef GUI_H
+#define GUI_H
 
 #include "SDL.h"
-#include <stdbool.h>
-#include "Init.h"
+#include "SDL2/SDL.h"
 
-struct questions_info {
-	bool quit;
+enum buttonstate {
+	common = 0,
+	hovered = 1,
+	clicked = 2
 };
 
-extern struct questions_info questions_handle_events(SDL_Event);
-extern void questions_render(SDL_Renderer *, struct questions_info, struct assets assets);
+extern SDL_Surface * draw_button_with_text(enum buttonstate, const char *, SDL_Rect, TTF_Font *, SDL_Color);
 
-#endif
+#endif/*def GUI_H*/

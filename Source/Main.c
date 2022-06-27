@@ -46,7 +46,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	struct timespec firsttime, secondtime;
 	struct menu_info menu_info = {0}; struct questions_info questions_info = {0};
 	for (ever){
-		timespec_get(&firsttime, TIME_UTC);
+		timespec_get(&firsttime, TIME_UTC); // For throttling FPS to reduce resource usage — see end of loop.
 
 		while (SDL_PollEvent(&e)){
 			if (e.type == SDL_QUIT){
@@ -68,10 +68,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 
 		switch (state){
 		case menu:
-			menu_render(renderer, menu_info);
+			menu_render(renderer, menu_info, assets);
 			break;
 		case questions:
-			questions_render(renderer, questions_info);
+			questions_render(renderer, questions_info, assets);
 			break;
 		default:
 			printf("\033[31mThe program has entered an unknown state and will now exit.  Apologies for the inconvenience.");

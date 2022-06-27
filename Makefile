@@ -12,7 +12,7 @@
 
 # This is the makefile for ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls.
 
-# Supposedly, this will crash non-GNU makes.  I can't test this, since I don't have any other makes.  (I should also clarify that I'm using GNU make not because I support the FSF, but because it's the only make I have access to.
+# Supposedly, this will crash non-GNU makes.  I can't test this, since I don't have any other makes, though not by choice.
 ifneq (,)
 This makefile requires GNU Make.
 endif

@@ -13,13 +13,15 @@
 #ifndef MENU_H
 #define MENU_H
 
+#include "SDL.h"
 #include <stdbool.h>
+#include "Init.h"
 
 struct menu_info {
 	bool quit;
 };
 
 extern struct menu_info menu_handle_events (SDL_Event);
-extern void menu_render(SDL_Renderer *, struct menu_info);
+extern void menu_render(SDL_Renderer *, struct menu_info, struct assets assets);
 
 #endif

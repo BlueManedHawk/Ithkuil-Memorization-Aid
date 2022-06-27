@@ -14,6 +14,7 @@
 
 #include "SDL.h"
 #include "Menu.h"
+#include "Init.h"
 
 struct menu_info menu_handle_events([[maybe_unused]] SDL_Event e)
 {
@@ -21,6 +22,6 @@ struct menu_info menu_handle_events([[maybe_unused]] SDL_Event e)
 	return m;
 }
 
-void menu_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct menu_info menu_info)
+void menu_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct menu_info menu_info, [[maybe_unused]] struct assets assets)
 {
 }
