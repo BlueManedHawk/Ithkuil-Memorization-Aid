@@ -16,7 +16,7 @@
 #include "Questions.h"
 #include "Init.h"
 
-struct questions_info questions_handle_events([[maybe_unused]] SDL_Event e)
+struct questions_info questions_handle_event([[maybe_unused]] SDL_Event e)
 {
 	struct questions_info q = {0};
 	return q;

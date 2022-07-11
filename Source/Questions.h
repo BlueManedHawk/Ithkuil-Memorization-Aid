@@ -21,7 +21,7 @@ struct questions_info {
 	bool quit;
 };
 
-extern struct questions_info questions_handle_events(SDL_Event);
+extern struct questions_info questions_handle_event(SDL_Event);
 extern void questions_render(SDL_Renderer *, struct questions_info, struct assets assets);
 
 #endif

@@ -16,7 +16,7 @@
 #include "Menu.h"
 #include "Init.h"
 
-struct menu_info menu_handle_events([[maybe_unused]] SDL_Event e)
+struct menu_info menu_handle_event([[maybe_unused]] SDL_Event e)
 {
 	struct menu_info m = {0};
 	return m;

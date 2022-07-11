@@ -53,9 +53,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 				quit++;
 				break;
 			} else if (state == menu) {
-				menu_info = menu_handle_events(e);
+				menu_info = menu_handle_event(e);
 			} else if (state == questions) {
-				questions_info = questions_handle_events(e);
+				questions_info = questions_handle_event(e);
 			} else {
 				printf("\033[31mThe program has entered an unknown state and will now exit.  Apologies for the inconvenience.");
 				exit(EXIT_FAILURE);
