@@ -1,0 +1,295 @@
+{
+	[
+		[""]
+	],
+	[
+		{
+			"name":"Retrospective",
+			"tla":"RTR",
+			"vn":"a",
+			"cat":1,
+			"cat_ord":1,
+			"desc":"The formative happened in the past."
+		},
+		{
+			"name":"Prospective",
+			"tla":"PRS",
+			"vn":"ä",
+			"cat":1,
+			"cat_ord":2,
+			"desc":"The formative will happen in the future."
+		},
+		{
+			"name":"Habitual",
+			"tla":"HAB",
+			"vn":"e",
+			"cat":1,
+			"cat_ord":3,
+			"desc":"The formative be happening."
+		},
+		{
+			"name":"Progressive",
+			"tla":"PRG",
+			"vn":"i",
+			"cat":1,
+			"cat_ord":4,
+			"desc":"The formative is in progress."
+		},
+		{
+			"name":"Imminent",
+			"tla":"IMM",
+			"vn":"ëi",
+			"cat":1,
+			"cat_ord":5,
+			"desc":"The formative is about to happen."
+		},
+		{
+			"name":"Precessive",
+			"tla":"PCS",
+			"vn":"ö",
+			"cat":1,
+			"cat_ord":6,
+			"desc":"The formative has just happened."
+		},
+		{
+			"name":"Regulative",
+			"tla":"REG",
+			"vn":"o",
+			"cat":1,
+			"cat_ord":7,
+			"desc":"The formative be happening from the past into the future."
+		},
+		{
+			"name":"Summative",
+			"tla":"SMM",
+			"vn":"ü",
+			"cat":1,
+			"cat_ord":8,
+			"desc":"The formative has already happened."
+		},
+		{
+			"name":"Anticipatory",
+			"tla":"ATP",
+			"vn":"u",
+			"cat":1,
+			"cat_ord":9,
+			"desc":"The formative has yet to begin happening."
+		},
+		{
+			"name":"Resumptive",
+			"tla":"RSM",
+			"vn":"ai",
+			"cat":2,
+			"cat_ord":1,
+			"desc":"The formative continues after having previously stopped."
+		},
+		{
+			"name":"Cessative",
+			"tla":"CSS",
+			"vn":"au",
+			"cat":2,
+			"cat_ord":2,
+			"desc":"The formative stops."
+		},
+		{
+			"name":"Pausal",
+			"tla":"PAU",
+			"vn":"ei",
+			"cat":2,
+			"cat_ord":3,
+			"desc":"The formative stops, but will resume."
+		},
+		{
+			"name":"Regressive",
+			"tla":"RGR",
+			"vn":"eu",
+			"cat":2,
+			"cat_ord":4,
+			"desc":"The formative returns to its original state after a change to a different state."
+		},
+		{
+			"name":"Preclusive",
+			"tla":"PCL",
+			"vn":"ëu",
+			"cat":2,
+			"cat_ord":5,
+			"desc":"The formative happens all at once without stopping."
+		},
+		{
+			"name":"Continuative",
+			"tla":"CNT",
+			"vn":"ou",
+			"cat":2,
+			"cat_ord":6,
+			"desc":"The formative keeps on happening."
+		},
+		{
+			"name":"Incessative",
+			"tla":"ICS",
+			"vn":"oi",
+			"cat":2,
+			"cat_ord":7,
+			"desc":"The formative continues without stopping."
+		},
+		{
+			"name":"Experiential",
+			"tla":"EXP",
+			"vn":"iu",
+			"cat":2,
+			"cat_ord":8,
+			"desc":"The formative happens at some point."
+		},
+		{
+			"name":"Interruptive",
+			"tla":"IRP",
+			"vn":"ui",
+			"cat":2,
+			"cat_ord":9,
+			"desc":"The formative is halted in the middle of its occurence."
+		},
+		{
+			"name":"Preemptive",
+			"tla":"PMP",
+			"vn":"ia/uä",
+			"cat":3,
+			"cat_ord":1,
+			"desc":"The formative happens for once and at last."
+		},
+		{
+			"name":"Climactic",
+			"tla":"CLM",
+			"vn":"ie/uë",
+			"cat":3,
+			"cat_ord":2,
+			"desc":"The formative happens for the last time."
+		},
+		{
+			"name":"Dilatory",
+			"tla":"DLT",
+			"vn":"io/üä",
+			"cat":3,
+			"cat_ord":3,
+			"desc":"The formative happens after having been long delayed in happening.."
+		},
+		{
+			"name":"Temporary",
+			"tla":"TMP",
+			"vn":"iö/üë",
+			"cat":3,
+			"cat_ord":4,
+			"desc":"The formative happens for the time being."
+		},
+		{
+			"name":"Expenditive",
+			"tla":"XPD",
+			"vn":"eë",
+			"cat":3,
+			"cat_ord":5,
+			"desc":"The formative happens all the time in an all-consuming manner."
+		},
+		{
+			"name":"Limitative",
+			"tla":"LIM",
+			"vn":"uö/öë",
+			"cat":3,
+			"cat_ord":6,
+			"desc":"The formative happens just in time."
+		},
+		{
+			"name":"Expeditive",
+			"tla":"EPD",
+			"vn":"uo/öä",
+			"cat":3,
+			"cat_ord":7,
+			"desc":"The formative happens in a hurry."
+		},
+		{
+			"name":"Protractive",
+			"tla":"PTC",
+			"vn":"ue/ië",
+			"cat":3,
+			"cat_ord":8,
+			"desc":"The formative happens with no particular rush."
+		},
+		{
+			"name":"Preparatory",
+			"tla":"PPR",
+			"vn":"ua/iä",
+			"cat":3,
+			"cat_ord":9,
+			"desc":"The formative happens in advance of a future situation."
+		},
+		{
+			"name":"Disclusive",
+			"tla":"DCL",
+			"vn":"ao",
+			"cat":4,
+			"cat_ord":1,
+			"desc":"The formative turns out to have happened."
+		},
+		{
+			"name":"Conclusive",
+			"tla":"CCL",
+			"vn":"aö",
+			"cat":4,
+			"cat_ord":2,
+			"desc":"The formative ends up happening (in the short term)."
+		},
+		{
+			"name":"Culminative",
+			"tla":"CUL",
+			"vn":"eo",
+			"cat":4,
+			"cat_ord":3,
+			"desc":"The formative ends up happening (over the long term)."
+		},
+		{
+			"name":"Intermediative",
+			"tla":"IMD",
+			"vn":"eö",
+			"cat":4,
+			"cat_ord":4,
+			"desc":"The formative happens somewhere along the way of another formative."
+		},
+		{
+			"name":"Tardative",
+			"tla":"TRD",
+			"vn":"oë",
+			"cat":4,
+			"cat_ord":5,
+			"desc":"The formative happens during a time period over which it reduces in intensity."
+		},
+		{
+			"name":"Transitional",
+			"tla":"TNS",
+			"vn":"öe",
+			"cat":4,
+			"cat_ord":6,
+			"desc":"The formative begins to happen (over the long term)."
+		},
+		{
+			"name":"Intercommutative",
+			"tla":"ITC",
+			"vn":"oe",
+			"cat":4,
+			"cat_ord":7,
+			"desc":"The formative happens in reciprocation of a similar event."
+		},
+		{
+			"name":"Motive",
+			"tla":"MTV",
+			"vn":"öa",
+			"cat":4,
+			"cat_ord":8,
+			"desc":"The formative happens in a way that removes its participants from discourse."
+		},
+		{
+			"name":"Sequential",
+			"tla":"SQN",
+			"vn":"oa",
+			"cat":4,
+			"cat_ord":9,
+			"desc":"The formative happens as a series of identical instances that comprise a larger unit."
+		}
+	]
+}
