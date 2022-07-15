@@ -22,6 +22,6 @@ struct questions_info questions_handle_event([[maybe_unused]] SDL_Event e)
 	return q;
 }
 
-void questions_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct questions_info questions_info, [[maybe_unused]] struct assets assets)
+void questions_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct questions_info questions_info, [[maybe_unused]] struct assptrs assptrs)
 {
 }

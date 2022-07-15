@@ -15,17 +15,44 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <regex.h>
+#include <string.h>
 
-struct assets load_assets(void)
+static long filetotal = 0;
+
+/* This function returns a structure of pointers to the various assets.  Since this is a structure of pointers, it's small enough that we can just return it directly.
+ *
+ * The font is loaded immediately, since it's necessary all the time, but the files aren't loaded until they're needed, so the structure just returns the file descriptors and which file they refer to.*/
+
+struct assptrs load_assptrs(void)
 {
 	DIR * dir = opendir("./Assets");
 	if (dir == NULL) goto fail;
 
-	struct assets assets = {0};
-	assets.barlow_condensed = TTF_OpenFont("./Assets/BarlowCondensed-Regular.ttf", 12);
-	if (assets.barlow_condensed == NULL) goto fail;
+	struct assptrs assptrs = {0};
+	assptrs.barlow_condensed = TTF_OpenFont("./Assets/BarlowCondensed-Regular.ttf", 12);
+	if (assptrs.barlow_condensed == NULL) goto fail;
 
-	return assets;
+	regex_t check;
+	regcomp(&check, "\\.json$", REG_ICASE | REG_NOSUB); // TODO:  This isn't a great way to check if these are actually JSON files.
+	struct dirent * dirent = NULL;
+	errno = 0;
+	long filetotal_internal = 0;
+	while ((dirent = readdir(dir)) != NULL){
+		/* TODO:  This is probably horrifically innefficient.  Is there any better way to do this?*/
+		if (regexec(&check, dirent->d_name, 0, NULL, 0) == 0){
+			filetotal_internal++;
+			assptrs.filenames[filetotal_internal - 1] = calloc(strlen(dirent->d_name), sizeof (char));
+			strcpy(assptrs.filenames[filetotal_internal - 1], dirent->d_name);
+		}
+	}
+	if (errno != 0) goto fail;
+	regfree(&check);
+	filetotal = filetotal_internal;
+	if (filetotal == 0) goto fail;
+
+	return assptrs;
 
 fail:
 	printf("\033[31mThe program's assets could not be loaded and the program will now exit.  Apologies for the inconvenience.\033[0m\n");
@@ -33,7 +60,10 @@ fail:
 
 }
 
-void unload_assets(struct assets assets)
+void unload_assptrs(struct assptrs assptrs)
 {
-	TTF_CloseFont(assets.barlow_condensed);
+	TTF_CloseFont(assptrs.barlow_condensed);
+
+	for (register long i = 0; i < filetotal - 1 /*‽‽‽‽‽‽‽*/; i++)
+		free(assptrs.filenames[i]);
 }

@@ -13,12 +13,15 @@
 #define INIT_H
 
 #include "SDL2/SDL_ttf.h"
+#include <stdio.h>
 
-struct assets {
+struct assptrs {
 	TTF_Font * barlow_condensed;
+	FILE * curfile;
+	char * filenames[];
 };
 
-extern struct assets load_assets(void);
-extern void unload_assets(struct assets);
+extern struct assptrs load_assptrs(void);
+extern void unload_assptrs(struct assptrs);
 
 #endif

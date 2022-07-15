@@ -22,6 +22,6 @@ struct menu_info {
 };
 
 extern struct menu_info menu_handle_event(SDL_Event);
-extern void menu_render(SDL_Renderer *, struct menu_info, struct assets assets);
+extern void menu_render(SDL_Renderer *, struct menu_info, struct assptrs assptrs);
 
 #endif

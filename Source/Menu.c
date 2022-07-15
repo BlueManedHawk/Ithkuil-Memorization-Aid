@@ -22,6 +22,6 @@ struct menu_info menu_handle_event([[maybe_unused]] SDL_Event e)
 	return m;
 }
 
-void menu_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct menu_info menu_info, [[maybe_unused]] struct assets assets)
+void menu_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct menu_info menu_info, [[maybe_unused]] struct assptrs assptrs)
 {
 }

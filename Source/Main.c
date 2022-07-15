@@ -35,7 +35,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	TTF_Init();
 	atexit(TTF_Quit);
 
-	struct assets assets = load_assets();
+	struct assptrs assptrs = load_assptrs();
 
 	SDL_Window * window = SDL_CreateWindow("ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
 	SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
@@ -68,10 +68,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 
 		switch (state){
 		case menu:
-			menu_render(renderer, menu_info, assets);
+			menu_render(renderer, menu_info, assptrs);
 			break;
 		case questions:
-			questions_render(renderer, questions_info, assets);
+			questions_render(renderer, questions_info, assptrs);
 			break;
 		default:
 			printf("\033[31mThe program has entered an unknown state and will now exit.  Apologies for the inconvenience.");
@@ -91,7 +91,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	unload_assets(assets);
+	unload_assptrs(assptrs);
 	TTF_Quit();
 	SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	SDL_Quit();
