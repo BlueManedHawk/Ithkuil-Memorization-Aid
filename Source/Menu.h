@@ -14,14 +14,18 @@
 #define MENU_H
 
 #include "SDL.h"
-#include <stdbool.h>
 #include "Init.h"
+#include <stdbool.h> // TODO:  Once we can move to Clang 15, get this out of here.
 
 struct menu_info {
 	bool quit;
+	bool swap;
+	bool click;
+	int pos[2];
 };
 
-extern struct menu_info menu_handle_event(SDL_Event);
-extern void menu_render(SDL_Renderer *, struct menu_info, struct assptrs assptrs);
+extern struct menu_info menu_handle_events(void);
+extern void menu_render(SDL_Renderer *, struct menu_info, struct assptrs);
+extern void menu_cleanup(struct assptrs);
 
 #endif

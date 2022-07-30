@@ -14,14 +14,15 @@
 #define QUESTIONS_H
 
 #include "SDL.h"
-#include <stdbool.h>
 #include "Init.h"
+#include <stdbool.h> // TODO:  Once we can move to Clang 15, get this out of here.
 
 struct questions_info {
 	bool quit;
+	bool swap;
 };
 
-extern struct questions_info questions_handle_event(SDL_Event);
-extern void questions_render(SDL_Renderer *, struct questions_info, struct assptrs assptrs);
+extern struct questions_info questions_handle_events();
+extern void questions_render(SDL_Renderer *, struct questions_info, struct assptrs);
 
 #endif

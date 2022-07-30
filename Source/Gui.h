@@ -16,12 +16,12 @@
 #include "SDL.h"
 #include "SDL2/SDL.h"
 
-enum buttonstate {
+enum [[clang::enum_extensibility(closed)]] buttonstate {
 	common = 0,
 	hovered = 1,
 	clicked = 2
 };
 
-extern SDL_Surface * draw_button_with_text(enum buttonstate, const char *, SDL_Rect, TTF_Font *, SDL_Color);
+__extension__ extern SDL_Surface * draw_button_with_text(enum buttonstate, const char *, SDL_Rect extent, TTF_Font *, int, SDL_Color) __attribute__((diagnose_if(extent.x != 0 || extent.y != 0, "X and Y of rectangle must be zeros", "error")));  // For whatever reason, this attribute doesn't work if one uses the standard syntax, and _that_ doesn't work unless its declared as being an extension.  ???????
 
 #endif/*def GUI_H*/

@@ -15,10 +15,19 @@
 #include "SDL.h"
 #include "Questions.h"
 #include "Init.h"
+#include <stdbool.h> //TODO:  Once we can move to Clang 15, get this out of here.
 
-struct questions_info questions_handle_event([[maybe_unused]] SDL_Event e)
+struct questions_info questions_handle_events()
 {
 	struct questions_info q = {0};
+	SDL_Event e;
+	while (SDL_PollEvent(&e)){
+		switch (e.type){
+		case SDL_QUIT:
+			q.quit = true;
+			break;
+		}
+	}
 	return q;
 }
 

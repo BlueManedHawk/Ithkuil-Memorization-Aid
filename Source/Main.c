@@ -15,7 +15,6 @@
 #include "SDL.h"
 #include <stdlib.h>
 #include <time.h>
-#include <stdbool.h>
 #include "Menu.h"
 #include "Questions.h"
 #include "SDL2/SDL_ttf.h"
@@ -23,7 +22,7 @@
 
 #define ever ;; // hehehe
 
-enum state {
+enum [[clang::enum_extensibility(closed)]] state {
 	menu,
 	questions
 };
@@ -40,28 +39,25 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	SDL_Window * window = SDL_CreateWindow("ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
 	SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
 
-	SDL_Event e;
-	bool quit = false;
 	enum state state = menu;
 	struct timespec firsttime, secondtime;
 	struct menu_info menu_info = {0}; struct questions_info questions_info = {0};
 	for (ever){
 		timespec_get(&firsttime, TIME_UTC); // For throttling FPS to reduce resource usage — see end of loop.
 
-		while (SDL_PollEvent(&e)){
-			if (e.type == SDL_QUIT){
-				quit++;
-				break;
-			} else if (state == menu) {
-				menu_info = menu_handle_event(e);
-			} else if (state == questions) {
-				questions_info = questions_handle_event(e);
-			} else {
-				printf("\033[31mThe program has entered an unknown state and will now exit.  Apologies for the inconvenience.");
-				exit(EXIT_FAILURE);
-			}
+		switch (state){
+		case menu:
+			menu_info = menu_handle_events();
+			break;
+		case questions:
+			questions_info = questions_handle_events();
+			break;
+		default:
+			printf("\033[31mThe program has entered an unknown state and will now exit.  Apologies for the inconvenience.");
+			exit(EXIT_FAILURE);
+
 		}
-		if (quit || menu_info.quit || questions_info.quit) break;
+		if (menu_info.quit || questions_info.quit) break;
 
 		SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
 		SDL_RenderClear(renderer);
@@ -80,6 +76,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 
 		SDL_RenderPresent(renderer);
 
+		if (menu_info.swap) state = questions;
+		if (questions_info.swap) state = menu;
+
 		timespec_get(&secondtime, TIME_UTC);
 		secondtime.tv_nsec -= firsttime.tv_nsec; secondtime.tv_sec -= firsttime.tv_sec;
 		if (secondtime.tv_sec > 0) continue;
@@ -89,6 +88,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		nanosleep(&firsttime, NULL);
 	}
 
+	menu_cleanup(assptrs);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	unload_assptrs(assptrs);

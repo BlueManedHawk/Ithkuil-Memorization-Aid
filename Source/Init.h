@@ -1,4 +1,5 @@
 /* LICENSE
+ *
  * Copyright © 2022 Blue-Maned_Hawk.  All rights reserved.
  *
  * This project should have come with a file called `LICENSE`.  In the event of any conflict between this comment and that file, that file shall be considered the authority.
@@ -18,7 +19,15 @@
 struct assptrs {
 	TTF_Font * barlow_condensed;
 	FILE * curfile;
-	char * filenames[];
+	long filetotal;
+	/* I just got done fixing a bizarre bug with this that occupied me for far too long, so i'm going to take this space to rant.
+	 *
+	 * This was initially `char * filenames[]`, which would have made things a lot easier to deal with, except that that kept leading to segfaults, because after the assptrs were loaded, this array would inevitably end up getting overwritten by _something_ (usually a function to which this wasn't even passed!) before it got passed on to the rendering subroutines.  Weirdly, this wouldn't happen if optimization was turned off, but of course we can't assume that everybody can afford that.  So, eventually, i just made the decision to have this be a dynamically allocated pointer-pointer, and that ended up working at the cost of being fuck-ass ugly and probably also kinda innefficient.
+	 *
+	 * So that was fun.
+	 *
+	 * — Blue-Maned_Hawk */
+	char ** filenames;
 };
 
 extern struct assptrs load_assptrs(void);

@@ -16,37 +16,46 @@
 #include <SDL2/SDL_ttf.h>
 #include <stddef.h>
 #include "Gui.h"
+#include <stdint.h>
 
 /* TODO: Once SDL_ttf 2.20 releases, we should make buttons render with the text's wrapping alignment centered. */
-SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SDL_Rect extent, TTF_Font * font, SDL_Color color){
-	SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, extent.w, extent.h + 12, 32, SDL_PIXELFORMAT_RGBA32);
-	SDL_Rect top = extent; top.y -= 12;
+SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SDL_Rect extent, TTF_Font * font, int fontsize, SDL_Color color)
+{
+	static const short w_pad = 6;
+	static const short button_travel = 6;
+
+	SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, extent.w + w_pad, extent.h + button_travel, 32, SDL_PIXELFORMAT_RGBA32);
+	SDL_Rect side = extent; side.y += button_travel;
 	uint32_t sidecolor, topcolor;
 
 	switch (state){
 	case common:
 		sidecolor = SDL_MapRGBA(surface->format, 0x44, 0x44, 0x44, 0xFF);
-		topcolor = SDL_MapRGBA(surface->format, 0x88, 0x88, 0x88, 0xFF);
+		topcolor = SDL_MapRGBA(surface->format, 0x66, 0x66, 0x66, 0xFF);
 		break;
 	case hovered:
+		sidecolor = SDL_MapRGBA(surface->format, 0x66, 0x66, 0x66, 0xFF);
+		topcolor = SDL_MapRGBA(surface->format, 0x88, 0x88, 0x88, 0xFF);
+		break;
 	case clicked:
 		sidecolor = SDL_MapRGBA(surface->format, 0x88, 0x88, 0x88, 0xFF);
-		topcolor = SDL_MapRGBA(surface->format, 0xCC, 0xCC, 0xCC, 0xFF);
 		break;
 	default:
 		return NULL;
 	}
 
+	TTF_SetFontSize(font, fontsize);
+	SDL_Surface * txt_surface = TTF_RenderUTF8_Blended_Wrapped(font, txt, color, extent.w + w_pad);
+
 	if (state == clicked){
-		SDL_FillRect(surface, &extent, topcolor);
+		SDL_FillRect(surface, &side, sidecolor);
+		SDL_BlitSurface(txt_surface, NULL, surface, &side);
 	} else {
-		SDL_FillRect(surface, &extent, sidecolor);
-		SDL_FillRect(surface, &top, topcolor);
+		SDL_FillRect(surface, &side, sidecolor);
+		SDL_FillRect(surface, &extent, topcolor);
+		SDL_BlitSurface(txt_surface, NULL, surface, &(SDL_Rect){.x = 000000000000000000000000000000000000 , .y = 0});
 	}
 
-	SDL_Surface * txt_surface = TTF_RenderUTF8_Blended_Wrapped(font, txt, color, extent.w);
-
-	SDL_BlitSurface(txt_surface, NULL, surface, &(SDL_Rect){.x = (extent.w - surface->w) / 2, .y = 0});
 	SDL_FreeSurface(txt_surface);
 	return surface;
 }
