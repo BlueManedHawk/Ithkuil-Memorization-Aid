@@ -1,5 +1,5 @@
 {
-	[
+	"questions":[
 		["Which case correspondes to the Vc value of vc?", "name"],
 		["What is the Vc value of name?", "vc"],
 		["Which category is the name case in?", "cat"],
@@ -11,7 +11,7 @@
 		["Which case's case-assessor best fits the description of \"ass\"?", "name"],
 		["Which case's inverse–case-assessor best fits the description of \"inv-ass\"?", "name"]
 	],
-	[
+	"data":[
 		{
 			"name":"Thematic",
 			"tla":"THM",
@@ -51,7 +51,7 @@
 		{
 			"name":"Affective",
 			"tla":"AFF",
-			"vc":"i",
+			"vc":"ı",
 			"semrole":"EXPERIENCER",
 			"desc":"The party that undergoes the verbal predicate as an unwilled, affective experience.",
 			"ass":"The party with the semantic role of an EXPERIENCER of X.",
@@ -63,7 +63,7 @@
 		{
 			"name":"Stimulative",
 			"tla":"STM",
-			"vc":"ëi",
+			"vc":"ëı",
 			"semrole":"STIMULUS",
 			"desc":"That which triggers an unwilled, affective state by means of the verbal predicate.",
 			"ass":"The party with a semantic role of a STIMULUS of X.",
@@ -123,7 +123,7 @@
 		{
 			"name":"Possessive",
 			"tla":"POS",
-			"vc":"ai",
+			"vc":"aı",
 			"desc":"The party which has destructible physical control or oversight of another formative, intentionally or not.",
 			"ass":"The party with destructible physical control of X, intentionally or not.",
 			"inv_ass":"That which X has destructible phyisical control of, intentionally or not.",
@@ -145,7 +145,7 @@
 		{
 			"name":"Genitive",
 			"tla":"GEN",
-			"vc":"ei",
+			"vc":"eı",
 			"desc":"The party with permanent, intrinsic association with another formative.",
 			"ass":"The party with intrinsic, permanent association with X.",
 			"inv_ass":"That which X has intrinsic, permanent association with.",
@@ -189,7 +189,7 @@
 		{
 			"name":"Originative",
 			"tla":"OGN",
-			"vc":"oi",
+			"vc":"oı",
 			"desc":"The party which is the literal or figurative source of another formative.",
 			"ass":"That from which X figuratively or literally originated.",
 			"inv_ass":"That of which X is the figurative or literal origin.",
@@ -200,7 +200,7 @@
 		{
 			"name":"Interdependent",
 			"tla":"IDP",
-			"vc":"iu",
+			"vc":"ıu",
 			"desc":"The party which has a complementary, reciprocal connection with another formative.",
 			"ass":"That with which X has a complementary, reciprocal connection.",
 			"inv_ass":"The complementary, reciprocal connection shared with X.",
@@ -211,7 +211,7 @@
 		{
 			"name":"Partitive",
 			"tla":"PAR",
-			"vc":"ui",
+			"vc":"uı",
 			"desc":"The party which is the \"content\" of another formative acting as a \"container\".",
 			"ass":"That of which X is the \"content\".",
 			"inv_ass":"That which is X's \"contents\".",
@@ -222,7 +222,7 @@
 		{
 			"name":"Applicative",
 			"tla":"APL",
-			"vc":"ia/uä",
+			"vc":"ıa/uä",
 			"desc":"That which is the circumstantial purpose of another formative.",
 			"ass":"The purpose to which X is circumstantially put.",
 			"inv_ass":"That which has X as its circumstantial purpose.",
@@ -233,7 +233,7 @@
 		{
 			"name":"Purposive",
 			"tla":"PUR",
-			"vc":"ie/uë",
+			"vc":"ıe/uë",
 			"desc":"That which is the intrinsic purpose of another formative.",
 			"ass":"The intrinsic purpose of X.",
 			"inv_ass":"That for which X is the intrinsic purpose.",
@@ -244,7 +244,7 @@
 		{
 			"name":"Transmissive",
 			"tla":"TRA",
-			"vc":"io/üä",
+			"vc":"ıo/üä",
 			"desc":"The party for which another formative occurs or is transmitted, regardless of benefit or detriment.",
 			"ass":"That for which X is done for, regardless of benefit or detriment.",
 			"inv_ass":"That which is done for X, regardless of benefit or detriment.",
@@ -255,7 +255,7 @@
 		{
 			"name":"Deferential",
 			"tla":"DFR",
-			"vc":"iö/üë",
+			"vc":"ıö/üë",
 			"desc":"The entity out of respect for which another formative occurs.",
 			"ass":"That out of respect for which X occurs.",
 			"inv_ass":"That which occurs out of respect for X.",
@@ -299,7 +299,7 @@
 		{
 			"name":"Comparative",
 			"tla":"CMP",
-			"vc":"ue/ië",
+			"vc":"ue/ıë",
 			"desc":"That which is being compared to another formative.",
 			"ass":"That which is being compared to X.",
 			"inv_ass":"That which X is being compared to.",
@@ -310,7 +310,7 @@
 		{
 			"name":"Considerative",
 			"tla":"CSD",
-			"vc":"ua/iä",
+			"vc":"ua/ıä",
 			"desc":"That according to which another formative is or occurs.",
 			"ass":"That which is or occurs according to X.",
 			"inv_ass":"That which X is or occurs according to",
@@ -453,7 +453,7 @@
 		{
 			"name":"Compositive",
 			"tla":"CPS",
-			"vc":"i+'",
+			"vc":"ı+'",
 			"desc":"That which another formative is composed of.",
 			"ass":"That which X is composed of.",
 			"inv_ass":"That which is composed of X.",
@@ -464,7 +464,7 @@
 		{
 			"name":"Comitative",
 			"tla":"COM",
-			"vc":"ëi+'",
+			"vc":"ëı+'",
 			"desc":"That which accompanies another formative.",
 			"ass":"That which accompanies X.",
 			"inv_ass":"That which X accompanies.",
@@ -508,7 +508,7 @@
 		{
 			"name":"Activative",
 			"tla":"ACT",
-			"vc":"ai+'",
+			"vc":"aı+'",
 			"semrole":"EXPERIENCER",
 			"desc":"The one who experiences a modal state of another formative.",
 			"ass":"That which has the semantic role of EXPERIENCER of a modal state of X.",
@@ -531,7 +531,7 @@
 		{
 			"name":"Essive",
 			"tla":"ESS",
-			"vc":"ei+'",
+			"vc":"eı+'",
 			"desc":"The role or name of another formative.",
 			"ass":"That which has the role of or is named as X.",
 			"inv_ass":"That which X has the role or name of.",
@@ -575,7 +575,7 @@
 		{
 			"name":"Dependent",
 			"tla":"DEP",
-			"vc":"oi+'",
+			"vc":"oı+'",
 			"desc":"The core of a dependence controlled by another formative.",
 			"ass":"That upon which X depends.",
 			"inv_ass":"That which depends upon X.",
@@ -586,7 +586,7 @@
 		{
 			"name":"Vocative",
 			"tla":"VOC",
-			"vc":"ui+'",
+			"vc":"uı+'",
 			"desc":"That which is being directly addressed.",
 			"ass":null,
 			"inv_ass":null,
@@ -597,7 +597,7 @@
 		{
 			"name":"Locative",
 			"tla":"LOC",
-			"vc":"i'a",
+			"vc":"ı'a",
 			"desc":"The location where another formative exists/occurs.",
 			"ass":"The location where X occurs/exists.",
 			"inv_ass":"That which occurs/exists at X.",
@@ -608,7 +608,7 @@
 		{
 			"name":"Attendant",
 			"tla":"ATD",
-			"vc":"i'e",
+			"vc":"ı'e",
 			"desc":"That which another formative exists/occurs in the presence of and which is involved because of that.",
 			"ass":"That in the presence of which X exists/occurs that is involved because of that.",
 			"inv_ass":"That which occurs/exists in the presence of X, which is involved because of that.",
@@ -619,7 +619,7 @@
 		{
 			"name":"Allative",
 			"tla":"ALL",
-			"vc":"i'o",
+			"vc":"ı'o",
 			"desc":"That which another formative is approaching.",
 			"ass":"That which X is approaching.",
 			"inv_ass":"That which is approaching X.",
@@ -630,7 +630,7 @@
 		{
 			"name":"Ablative",
 			"tla":"ABL",
-			"vc":"i'ö",
+			"vc":"ı'ö",
 			"desc":"That which another formative is receding from.",
 			"ass":"That which X is receding from.",
 			"inv_ass":"That which is receding from X.",

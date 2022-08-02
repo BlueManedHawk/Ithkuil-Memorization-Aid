@@ -46,6 +46,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	SDL_Surface * screen = SDL_CreateRGBSurfaceWithFormat(0, screenwidth, screenheight, 32, SDL_PIXELFORMAT_RGBA32);
 	SDL_SetSurfaceRLE(screen, true);
 	struct extra extra = {0};
+	extra.filereq = -1;
 	screen->userdata = &extra;
 	SDL_Texture * screentex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, screenwidth, screenheight);
 	void * pixels; int pitch;
@@ -71,8 +72,17 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		SDL_RenderCopy(renderer, screentex, NULL, NULL);
 		SDL_RenderPresent(renderer);
 
+		if (((struct extra *)(screen->userdata))->filereq >= 0) {
+			if (assptrs.curfile != NULL) fclose(assptrs.curfile);
+			assptrs.curfile = fopen(assptrs.filenames[((struct extra *)(screen->userdata))->filereq], "r");
+		} else {
+			if (assptrs.curfile != NULL) fclose(assptrs.curfile);
+		}
 		if (((struct extra *)(screen->userdata))->quit) break;
-		if (((struct extra *)(screen->userdata))->swap) mode = (mode == menu) ? questions : menu;
+		if (((struct extra *)(screen->userdata))->swap) {
+			mode = (mode == menu) ? questions : menu;
+			((struct extra *)(screen->userdata))->swap = false;
+		}
 
 		timespec_get(&secondtime, TIME_UTC);
 		secondtime.tv_nsec -= firsttime.tv_nsec; secondtime.tv_sec -= firsttime.tv_sec;

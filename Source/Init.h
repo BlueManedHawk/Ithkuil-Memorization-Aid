@@ -36,6 +36,8 @@ struct assptrs {
 struct extra {
 	bool quit;
 	bool swap;
+	int16_t timer;
+	signed short filereq;
 };
 
 extern struct assptrs load_assptrs(void);
