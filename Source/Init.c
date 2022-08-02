@@ -34,17 +34,17 @@ struct assptrs load_assptrs(void)
 
 	assptrs.filenames = NULL;
 	regex_t check;
-	regcomp(&check, "\\.json$", REG_ICASE | REG_NOSUB); // TODO:  This isn't a great way to check if these are actually JSON files.
+	regcomp(&check, "\\.json$", REG_ICASE | REG_NOSUB); // TODO:  This isn't a great way to check if these are actually JSON files.  Once we get JSON parsing done, maybe we could use that?
 	struct dirent * dirent = NULL;
 	errno = 0;
 	while ((dirent = readdir(dir)) != NULL){
 		/* TODO:  This is probably horrifically innefficient.  Is there any better way to do this? */
 		if (regexec(&check, dirent->d_name, 0, NULL, 0) == 0){
+			assptrs.filenames = realloc(assptrs.filenames, sizeof (char *) * assptrs.filetotal + 1);
+			assptrs.filenames[assptrs.filetotal] = calloc(strlen(dirent->d_name) + 1 - 5, sizeof (char));
+			strcpy(assptrs.filenames[assptrs.filetotal], dirent->d_name);
+			assptrs.filenames[assptrs.filetotal][strlen(assptrs.filenames[assptrs.filetotal]) - 5] = '\0';
 			assptrs.filetotal++;
-			assptrs.filenames = realloc(assptrs.filenames, sizeof (char *) * assptrs.filetotal);
-			assptrs.filenames[assptrs.filetotal - 1] = calloc(strlen(dirent->d_name) + 1 - 5, sizeof (char));
-			strcpy(assptrs.filenames[assptrs.filetotal - 1], dirent->d_name);
-			assptrs.filenames[assptrs.filetotal - 1][strlen(assptrs.filenames[assptrs.filetotal - 1]) - 5] = '\0';
 		}
 	}
 	if (errno != 0) goto fail;
@@ -61,7 +61,6 @@ fail:
 void unload_assptrs(struct assptrs assptrs)
 {
 	TTF_CloseFont(assptrs.barlow_condensed);
-
 	for (register long i = 0; i < assptrs.filetotal - 1 /*‽‽‽‽‽‽‽*/; i++)
 		free(assptrs.filenames[i]);
 }

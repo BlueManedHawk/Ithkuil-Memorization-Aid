@@ -15,6 +15,9 @@
 
 #include "SDL2/SDL_ttf.h"
 #include <stdio.h>
+#include <stdbool.h> // TODO:  Once we update to Clang 15, get this out of here.
+
+static const int screenwidth = 640, screenheight = 480;
 
 struct assptrs {
 	TTF_Font * barlow_condensed;
@@ -28,6 +31,11 @@ struct assptrs {
 	 *
 	 * — Blue-Maned_Hawk */
 	char ** filenames;
+};
+
+struct extra {
+	bool quit;
+	bool swap;
 };
 
 extern struct assptrs load_assptrs(void);

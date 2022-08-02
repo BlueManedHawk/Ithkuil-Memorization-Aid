@@ -17,20 +17,8 @@
 #include "Init.h"
 #include <stdbool.h> //TODO:  Once we can move to Clang 15, get this out of here.
 
-struct questions_info questions_handle_events()
+void questions_render(SDL_Surface * screen, [[maybe_unused]] struct assptrs assptrs)
 {
-	struct questions_info q = {0};
-	SDL_Event e;
-	while (SDL_PollEvent(&e)){
-		switch (e.type){
-		case SDL_QUIT:
-			q.quit = true;
-			break;
-		}
-	}
-	return q;
-}
-
-void questions_render([[maybe_unused]] SDL_Renderer * renderer, [[maybe_unused]] struct questions_info questions_info, [[maybe_unused]] struct assptrs assptrs)
-{
+	SDL_FillRect(screen, NULL, SDL_MapRGBA(screen->format, 0x00, 0x00, 0x00, 0xFF));
+	((struct extra *)screen->userdata)->swap = true;
 }

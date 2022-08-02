@@ -24,7 +24,7 @@ SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SD
 	static const short w_pad = 6;
 	static const short button_travel = 6;
 
-	SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, extent.w + w_pad, extent.h + button_travel, 32, SDL_PIXELFORMAT_RGBA32);
+	SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, extent.w, extent.h + button_travel, 32, SDL_PIXELFORMAT_RGBA32);
 	SDL_Rect side = extent; side.y += button_travel;
 	uint32_t sidecolor, topcolor;
 
@@ -40,8 +40,6 @@ SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SD
 	case clicked:
 		sidecolor = SDL_MapRGBA(surface->format, 0x88, 0x88, 0x88, 0xFF);
 		break;
-	default:
-		return NULL;
 	}
 
 	TTF_SetFontSize(font, fontsize);
