@@ -24,7 +24,7 @@
 /* Theoretically, we could use the `.userdata` field of SDL_surfaces instead of using an array of structs, but that would require like linked lists and more complicated code and we'd probably end up using structs somewhere in it anyway so we just go with this.  There's also the worry that doing things with `.userdata` could make it seem like we care about elegance, which we don't.  We care about practicality—that's why this is written in C, after all! */
 struct buttondata {int x; int y; SDL_Surface * surfaces[3];};
 static struct buttondata * categories;
-static struct buttondata quitbutton, timer[3] ;
+static struct buttondata quitbutton, timer[3];
 static SDL_Surface * timertxt_surface;
 
 static SDL_Surface * toptext;
@@ -71,7 +71,7 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 	SDL_PumpEvents();
 	click = (SDL_GetMouseState(&mousepos[0], &mousepos[1]) & SDL_BUTTON_LMASK) ? true : false;
 
-	if (!__builtin_expect_with_probability(cached, 1, 1.0)) [[clang::unlikely]] {  // Using both `__builtin_expect_with_probability()` _and_ `[[clang::unlikely]]` is probably a bit overkill.
+	if (!__builtin_expect_with_probability(cached, true, 1.0)) [[clang::unlikely]] {  // Using both `__builtin_expect_with_probability()` _and_ `[[clang::unlikely]]` is probably a bit overkill.
 		/* TODO: this is hard to mentally parse.  I ought to rewrite it sometime. */
 		TTF_SetFontSize(assptrs.barlow_condensed, 12);
 		int h, w;
@@ -159,7 +159,7 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 	}
 
 	dest.x = quitbutton.x; dest.y = quitbutton.y;
-	dest.w = quitbutton.surfaces[0]->w; dest.h = quitbutton.surfaces[0]->h;
+	dest.w = quitbutton.surfaces[1]->w; dest.h = quitbutton.surfaces[0]->h;
 	if (SDL_PointInRect(&clickloc, &dest)) {
 		if (click) SDL_BlitSurface(quitbutton.surfaces[2], NULL, screen, &dest);
 		else if (release) SDL_PushEvent(&(SDL_Event){.type = SDL_QUIT});  // could just directly set the quit state, but this is sillier and more fun
@@ -172,8 +172,10 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 		dest.x = timer[i].x; dest.y = timer[i].y;
 		dest.w = timer[i].surfaces[0]->w; dest.h = timer[i].surfaces[0]->h;
 		if (SDL_PointInRect(&clickloc, &dest)) {
-			if (click) SDL_BlitSurface(timer[i].surfaces[2], NULL, screen, &dest);
-			else if (release) switch (i){
+			if (click) {
+				SDL_BlitSurface(timer[i].surfaces[2], NULL, screen, &dest);
+			} else {
+				if (release) switch (i){
 				case 2:
 					((struct extra *)(screen->userdata))->timer = 0;
 					break;
@@ -183,8 +185,10 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 					break;
 				case 0:
 					((struct extra *)(screen->userdata))->timer++;
+					break;
+				}
+				SDL_BlitSurface(timer[i].surfaces[1], NULL, screen, &dest);
 			}
-			else SDL_BlitSurface(timer[i].surfaces[1], NULL, screen, &dest);
 		} else {
 			SDL_BlitSurface(timer[i].surfaces[0], NULL, screen, &dest);
 		}
