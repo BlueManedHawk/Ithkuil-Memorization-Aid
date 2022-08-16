@@ -1,15 +1,15 @@
 {
 	"questions":[
-		["Which case correspondes to the Vc value of vc?", "name"],
-		["What is the Vc value of name?", "vc"],
-		["Which category is the name case in?", "cat"],
-		["Which semantic role is conveyed by the name case?", "semrole"],
-		["Which of the following best describes the name case?", "desc"],
-		["Which case best fits the description of \"desc\"?", "name"],
-		["Which of the following best describes the name case's case-assessor?", "ass"],
-		["Which of the following best describes the name case's inverse–case-assessor?", "inv_ass"],
-		["Which case's case-assessor best fits the description of \"ass\"?", "name"],
-		["Which case's inverse–case-assessor best fits the description of \"inv-ass\"?", "name"]
+		["Which case correspondes to the Vc value of \u0098vc\u009c?", "\u0098name\u009c"],
+		["What is the Vc value of the \u0098name\u009c case?", "\u0098vc\u009c"],
+		["Which category is the \u0098name\u009c case in?", "\u0098cat\u009c"],
+		["Which semantic role is conveyed by the \u0098name\u009c case?", "\u0098semrole\u009c"],
+		["Which of the following best describes the \u0098name\u009c case?", "\u0098desc\u009c"],
+		["Which case best fits the description of \"\u0098desc\u009c\"?", "\u0098name\u009c"],
+		["Which of the following best describes the \u0098name\u009c case's case-assessor?", "\u0098ass\u009c"],
+		["Which of the following best describes the \u0098name\u009c case's inverse–case-assessor?", "\u0098inv_ass\u009c"],
+		["Which case's case-assessor best fits the description of \"\u0098ass\u009c\"?", "\u0098name\u009c"],
+		["Which case's inverse–case-assessor best fits the description of \"\u0098inv-ass\u009c\"?", "\u0098name\u009c"]
 	],
 	"data":[
 		{

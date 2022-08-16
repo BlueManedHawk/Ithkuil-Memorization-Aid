@@ -15,7 +15,6 @@
 
 #include "SDL.h"
 #include "Init.h"
-#include <stdbool.h> // TODO:  Once we can move to Clang 15, get this out of here.
 
 extern void questions_render(SDL_Surface *, struct assptrs);
 

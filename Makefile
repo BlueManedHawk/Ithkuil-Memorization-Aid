@@ -18,10 +18,10 @@ This makefile requires GNU Make.
 endif
 
 CC = clang-13
-CFLAGS = -Wall -Werror -Wextra -pedantic
-CFLAGS += -std=c2x -Og -glldb ` sdl2-config --cflags `
-LDFLAGS = ` sdl2-config --libs ` -lSDL2_ttf
-SRC = $(wildcard Source/*.c)
+CFLAGS = -Werror -Wall -Wextra -pedantic -Wno-gnu-binary-literal # Standardized by paper N2549 in C2x, yet Clang doesn't accept them.
+CFLAGS += -std=c2x -glldb ` sdl2-config --cflags ` -Og
+LDFLAGS = ` sdl2-config --libs ` -lSDL2_ttf -lm
+SRC = $(wildcard Source/*.c Libraries/*.c)
 OBJ = $(SRC:.c=.o)
 
 help:

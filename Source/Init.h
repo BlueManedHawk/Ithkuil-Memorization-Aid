@@ -15,13 +15,14 @@
 
 #include "SDL2/SDL_ttf.h"
 #include <stdio.h>
+#include "../Libraries/json.h"
 #include <stdbool.h> // TODO:  Once we update to Clang 15, get this out of here.
 
 static const int screenwidth = 640, screenheight = 480;
 
 struct assptrs {
 	TTF_Font * barlow_condensed;
-	FILE * curfile;
+	json_value * curfile;
 	long filetotal;
 	/* I just got done fixing a bizarre bug with this that occupied me for far too long, so i'm going to take this space to rant.
 	 *

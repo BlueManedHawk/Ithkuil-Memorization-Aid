@@ -16,14 +16,16 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <regex.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <assert.h>
+#include "../Libraries/json.h"
 
 /* This function returns a structure of pointers to the various assets.  Since this is a structure of pointers, it's small enough that we can just return it directly.
  *
  * The font is loaded immediately, since it's necessary all the time, but the files aren't loaded until they're needed, so the structure just returns the filenames.  */
 
-struct assptrs load_assptrs(void)
+[[clang::optnone]] struct assptrs load_assptrs(void)
 {
 	DIR * dir = opendir("./Assets");
 	if (dir == NULL) goto fail;
@@ -33,28 +35,35 @@ struct assptrs load_assptrs(void)
 	if (assptrs.barlow_condensed == NULL) goto fail;
 
 	assptrs.filenames = NULL;
-	regex_t check;
-	regcomp(&check, "\\.json$", REG_ICASE | REG_NOSUB); // TODO:  This isn't a great way to check if these are actually JSON files.  Once we get JSON parsing done, maybe we could use that?
 	struct dirent * dirent = NULL;
-	errno = 0;
-	while ((dirent = readdir(dir)) != NULL){
+	while ((dirent = readdir(dir)) != NULL) {
 		/* TODO:  This is probably horrifically innefficient.  Is there any better way to do this? */
-		if (regexec(&check, dirent->d_name, 0, NULL, 0) == 0){
+		char name[0b10'0000'0000] = "./Assets/";
+		strcat(name, dirent->d_name);
+		struct stat fstatus;
+		stat(name, &fstatus);
+		char * buf = malloc(fstatus.st_size);
+		FILE * file = fopen(name, "r");
+		fread(buf, fstatus.st_size, 1, file);
+		fclose(file);
+		json_value * tree;
+		if ((tree = json_parse(buf, fstatus.st_size)) != NULL){
+			json_value_free(tree);
+			long i = assptrs.filetotal;
 			assptrs.filenames = realloc(assptrs.filenames, sizeof (char *) * assptrs.filetotal + 1);
-			assptrs.filenames[assptrs.filetotal] = calloc(strlen(dirent->d_name) + 1 - 5, sizeof (char));
-			strcpy(assptrs.filenames[assptrs.filetotal], dirent->d_name);
-			assptrs.filenames[assptrs.filetotal][strlen(assptrs.filenames[assptrs.filetotal]) - 5] = '\0';
+			assptrs.filenames[i] = calloc(strlen(dirent->d_name) + 1, sizeof (char));
+			strcpy(assptrs.filenames[i], dirent->d_name);
+			assptrs.filenames[i][strlen(assptrs.filenames[i]) - 5] = '\0';
 			assptrs.filetotal++;
 		}
+		free(buf);
 	}
-	if (errno != 0) goto fail;
-	regfree(&check);
 	if (assptrs.filetotal == 0) goto fail;
 
 	return assptrs;
 
 fail:
-	printf("\033[31mThe program's assets could not be loaded and the program will now exit.  Apologies for the inconvenience.\033[0m\n");
+	printf("\033[31mThe program's assets could not be loaded and the program will now exit.  Apologies for the inconvenience.\033[m\n");
 	exit(EXIT_FAILURE);
 }
 

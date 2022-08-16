@@ -17,15 +17,16 @@
 #include <stddef.h>
 #include "Gui.h"
 #include <stdint.h>
+#include <stdbool.h>  // TODO:  Once we can upgrade to Clang 15, get this out of here.
 
 /* TODO: Once SDL_ttf 2.20 releases, we should make buttons render with the text's wrapping alignment centered. */
 SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SDL_Rect extent, TTF_Font * font, int fontsize, SDL_Color color)
 {
-	static const short w_pad = 6;
-	static const short button_travel = 6;
+	static const short width_pad = 6;
+	static const short button_depth = 6;
 
-	SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, extent.w, extent.h + button_travel, 32, SDL_PIXELFORMAT_RGBA32);
-	SDL_Rect side = extent; side.y += button_travel;
+	SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, extent.w, extent.h + button_depth, 32, SDL_PIXELFORMAT_RGBA32);
+	SDL_Rect side = extent; side.y += button_depth;
 	uint32_t sidecolor, topcolor;
 
 	switch (state){
@@ -43,7 +44,7 @@ SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SD
 	}
 
 	TTF_SetFontSize(font, fontsize);
-	SDL_Surface * txt_surface = TTF_RenderUTF8_Blended_Wrapped(font, txt, color, extent.w + w_pad);
+	SDL_Surface * txt_surface = TTF_RenderUTF8_Blended_Wrapped(font, txt, color, extent.w + width_pad);
 
 	if (state == clicked){
 		SDL_FillRect(surface, &side, sidecolor);
@@ -57,3 +58,38 @@ SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SD
 	SDL_FreeSurface(txt_surface);
 	return surface;
 }
+
+struct buttondata * alloc_button(const char * text, SDL_Color color, short ptsize, TTF_Font * font)
+{
+	int h, w;
+	TTF_SetFontSize(font, ptsize);
+	TTF_SizeUTF8(font, text, &w, &h);
+	struct buttondata * button = malloc(sizeof (struct buttondata));
+	for (register short i = 0; i < 3; i++)
+		button->surfaces[i] = draw_button_with_text((enum buttonstate) i, text, (SDL_Rect){.h = h, .w = w + 6, .x = 0, .y = 0}, font, ptsize, color);
+	return button;
+}
+
+void free_button(struct buttondata * button)
+{
+	for (register size_t i = 0; i < sizeof button->surfaces / sizeof button->surfaces[0]; i++)
+		SDL_FreeSurface(button->surfaces[i]);
+	free(button);
+}
+
+/* void blit_apt_buttonstate(struct buttondata * button, SDL_Surface * blit_to, SDL_Point clickloc, bool isclicked, bool isreleased, void (^release_callback)(void)) {
+	SDL_Rect dest = {0};
+	dest.x = button->pos[0]; dest.y = button->pos[1];
+	dest.w = button->surfaces[0]->w; dest.h = button->surfaces[0]->h;
+	if (SDL_PointInRect(&clickloc, &dest)) {
+		if (isclicked) {
+			SDL_BlitSurface(button->surfaces[2], NULL, blit_to, &dest);
+		} else {
+			SDL_BlitSurface(button->surfaces[1], NULL, blit_to, &dest);
+			if (isreleased)
+				release_callback();
+		}
+	} else {
+		SDL_BlitSurface(button->surfaces[0], NULL, blit_to, &dest);
+	}
+} */

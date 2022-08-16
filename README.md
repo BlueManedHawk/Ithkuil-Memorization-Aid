@@ -1,5 +1,7 @@
 # ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls
 
+**Warning:  This is a rather heavy piece of software.  Work will be done to make it more lightweight in the future, but for now, be warned that this may cause serious slowdown or completely crash/freeze some systems.**
+
 This repository hosts a piece of software intended as a memorization aid for the various parts of the constructed language Ithkuil.  It is intended to be used not on its own, but as a supplementary tool within your broader learning of the language.
 
 The software works by having you select a category of the language which you wish to learn, after which it will present you with an endless series of multiple-choice questions regarding the category you selected.  Questions which you answered recently will be given lower priority for selection, especially if you answered them correctly.  You can switch to a different category at any time, and you can set timers for the questions if you want.

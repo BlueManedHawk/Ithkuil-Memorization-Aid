@@ -20,6 +20,9 @@
 #include "SDL2/SDL_ttf.h"
 #include "Init.h"
 #include <limits.h>
+#include <stdio.h>
+#include <sys/stat.h>
+#include "../Libraries/json.h" // TODO:  _very_ unhappy about this
 
 #define ever ;; // hehehe
 
@@ -72,11 +75,23 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		SDL_RenderCopy(renderer, screentex, NULL, NULL);
 		SDL_RenderPresent(renderer);
 
-		if (((struct extra *)(screen->userdata))->filereq >= 0) {
-			if (assptrs.curfile != NULL) fclose(assptrs.curfile);
-			assptrs.curfile = fopen(assptrs.filenames[((struct extra *)(screen->userdata))->filereq], "r");
+		if (((struct extra *)screen->userdata)->filereq >= 0) {
+			if (assptrs.curfile != NULL)
+				json_value_free(assptrs.curfile);
+			char fname[0b10'0000'0000] = "./Assets/";
+			strcat(fname, assptrs.filenames[((struct extra *)screen->userdata)->filereq]);
+			strcat(fname, ".json");
+			struct stat fstatus = {0};
+			stat(fname, &fstatus);
+			FILE * file = fopen(fname, "r");
+			char * buf = malloc(fstatus.st_size);
+			fread(buf, fstatus.st_size, 1, file);
+			fclose(file);
+			assptrs.curfile = json_parse(buf, fstatus.st_size);
+			free(buf);
 		} else {
-			if (assptrs.curfile != NULL) fclose(assptrs.curfile);
+			if (assptrs.curfile != NULL)
+				json_value_free(assptrs.curfile);
 		}
 		if (((struct extra *)(screen->userdata))->quit) break;
 		if (((struct extra *)(screen->userdata))->swap) {
