@@ -34,6 +34,8 @@ enum [[clang::enum_extensibility(closed)]] mode {
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 {
+	/* I'm aware that `rand()` is a terrible method of randomness, much as i am also aware that this is a terrible method of seeding the pool.  However, when i tried to use `/dev/random` or `/dev/urandom` (via syscall or file!) instead of `rand()`, it would _always_ completely and entirely block the entire program. */
+	srand((unsigned int)time(NULL));
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	atexit(SDL_Quit);
 	TTF_Init();
