@@ -199,12 +199,16 @@ fukitol:
 		for (register short i = 0; i < 4; i++)
 			SDL_FreeSurface(answer_surfaces[i]);
 
+		TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
 		TTF_SetFontSize(assptrs.barlow_condensed, 16);
 		question_surface = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, question, (SDL_Color){0xff, 0xff, 0xff, 0xff}, screenwidth);
 		TTF_SetFontSize(assptrs.barlow_condensed, 12);
-		for (register short i = 0; i < 4; i++)
-			if ((answer_surfaces[i] = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, answers[i], (SDL_Color){0xff, 0xff, 0xff, 0xff}, screenwidth)) == NULL)
+		int w;
+		for (register short i = 0; i < 4; i++) {
+			TTF_SizeUTF8(assptrs.barlow_condensed, answers[i], &w, NULL);
+			if ((answer_surfaces[i] = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, answers[i], (SDL_Color){0xff, 0xff, 0xff, 0xff}, screenwidth > w ? w : screenwidth)) == NULL)
 				fprintf(stderr, "Error in %s at %d:  %s\n", __func__, __LINE__, SDL_GetError());
+		}
 
 		loadnext = false;
 	}
@@ -238,8 +242,9 @@ fukitol:
 	/* This can't use the horrifying macro in `Gui.h` because the answers aren't stored as `struct buttondata`.  Quite honestly, that could be considered a mercy of fate.  Most everything else can use the macro. */
 	dest.y += question_surface->h * 3/2;
 	for (register short i = 0; i < 4; i++) {
-		dest.x = (screenwidth - answer_surfaces[i]->w) / 2;
-		dest.w = answer_surfaces[i]->w; dest.h = answer_surfaces[i]->h;
+		const short width_pad = 6;
+		dest.x = (screenwidth - answer_surfaces[i]->w) / 2 - width_pad;
+		dest.w = answer_surfaces[i]->w + 2 * width_pad; dest.h = answer_surfaces[i]->h;
 		if (selected < 0) {
 			if (SDL_PointInRect(&clickloc, &dest)) {
 				if (click) {
@@ -256,6 +261,7 @@ fukitol:
 				}
 			}
 		}
+		dest.x += width_pad;
 		SDL_BlitSurface(answer_surfaces[i], NULL, screen, &dest);
 		dest.y += answer_surfaces[i]->h;
 	}
@@ -273,7 +279,7 @@ fukitol:
 				dest.w = rw->w; dest.h = rw->h;
 				SDL_BlitSurface(rw, NULL, response_surface, &dest);
 			} else {
-				short i= rand() % (sizeof wrong / sizeof wrong[0] - 1);
+				short i = rand() % (sizeof wrong / sizeof wrong[0] - 1);
 				TTF_SetFontSize(assptrs.barlow_condensed, 16);
 				rw = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, wrong[i], (SDL_Color){0xff, 0x44, 0x44, 0xff});
 				dest.x = (screenwidth - rw->w) / 2;
@@ -285,7 +291,8 @@ fukitol:
 				sprintf(right_ans_txt, "Correct answer:  %s", answers[correct_ans_num]);
 				TTF_SetFontSize(assptrs.barlow_condensed, 14);
 				dest.y += rw->h;
-				rw = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, right_ans_txt, (SDL_Color){0xff, 0xff, 0xff, 0xff});
+				TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
+				rw = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, right_ans_txt, (SDL_Color){0xff, 0xff, 0xff, 0xff}, screenwidth);
 				dest.x = (screenwidth - rw->w) / 2;
 				dest.w = rw->w; dest.h = rw->h;
 				SDL_BlitSurface(rw, NULL, response_surface, &dest);

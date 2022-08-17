@@ -19,10 +19,9 @@
 #include <stdint.h>
 #include <stdbool.h>  // TODO:  Once we can upgrade to Clang 15, get this out of here.
 
-/* TODO: Once SDL_ttf 2.20 releases, we should make buttons render with the text's wrapping alignment centered. */
 SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SDL_Rect extent, TTF_Font * font, int fontsize, SDL_Color color)
 {
-	static const short width_pad = 6;
+	[[maybe_unused]] static const short width_pad = 6;
 	static const short button_depth = 6;
 
 	SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, extent.w, extent.h + button_depth, 32, SDL_PIXELFORMAT_RGBA32);
@@ -44,7 +43,8 @@ SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SD
 	}
 
 	TTF_SetFontSize(font, fontsize);
-	SDL_Surface * txt_surface = TTF_RenderUTF8_Blended_Wrapped(font, txt, color, extent.w + width_pad);
+	TTF_SetFontWrappedAlign(font, TTF_WRAPPED_ALIGN_CENTER);
+	SDL_Surface * txt_surface = TTF_RenderUTF8_Blended_Wrapped(font, txt, color, extent.w);
 
 	if (state == clicked){
 		SDL_FillRect(surface, &side, sidecolor);
