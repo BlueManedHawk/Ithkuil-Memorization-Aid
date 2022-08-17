@@ -6,4 +6,10 @@ This project is copylefted.  You may freely use this software for any purpose, t
 
 This license does not apply to patents or trademarks.
 
+This project makes use of Barlow Condensed, licensed by the Barlow Project Authors under the SIL Open Font License v1.1, available to view here:  https://github.com/jpt/barlow/blob/main/OFL.txt.
+
+This project makes use of SDL 2.0.20 and SDL_ttf 2.20.0, both licensed by Sam Lantinga under separate instances of the zlib license, available to view heres:  https://www.libsdl.org/license.php and https://github.com/libsdl-org/SDL_ttf/blob/main/LICENSE.txt.
+
+This project makes use of json-parser, licensed by the json-parser authors under the BSD 2-Clause license, available to view here:  https://github.com/json-parser/json-parser/blob/master/LICENSE.
+
 THIS PRODUCT COMES WITH ABSOLUTELY NO WARRANTY, IMPLIED OR EXPLICIT, TO THE EXTENT PERMITTED BY LAW.  THE AUTHOR DISCLAIMS ANY LIABILITY FOR ANY DAMAGES OF ANY KIND CAUSED BY THIS PRODUCT, TO THE EXTENT PERMITTED BY LAW.

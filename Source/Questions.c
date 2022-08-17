@@ -140,6 +140,7 @@ void questions_render(SDL_Surface * screen, struct assptrs assptrs)
 				release = true;
 		}
 	}
+	/* TODO:  scaling.  This will also require work in `Source/Main.c` and `Source/Menu.c`. */
 	SDL_Point clickloc;
 	SDL_PumpEvents();
 	click = (SDL_GetMouseState(&clickloc.x, &clickloc.y) & SDL_BUTTON_LMASK) ? true : false;
@@ -193,7 +194,20 @@ fukitol:
 			else
 				break;
 		}
-		/* TODO: also check if any of the answers are identical and replace one of them if they are, making sure not to replace answers[correct_ans_num] */
+		for (register int i = 0; i < 4; i++)
+			for (register int j = i + 1; j < 4; j++)
+				if (!strcmp(answers[i], answers[j])) {
+					register int toreplace = correct_ans_num == j ? i : j;
+					char incor_ans[assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.length + 1];  strcpy(cor_ans, assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.ptr);
+					while (true) {
+						free(answers[toreplace]);
+						x = rand() % (assptrs.curfile->u.object.values[data_loc].value->u.array.length - 1);
+						if ((answers[toreplace] = replace_substrings(assptrs.curfile, incor_ans, x)) == NULL)
+							continue;
+						else
+							break;
+					}
+				}
 
 		SDL_FreeSurface(question_surface);
 		for (register short i = 0; i < 4; i++)

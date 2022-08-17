@@ -61,6 +61,7 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 				release = true;
 		}
 	}
+	/* TODO:  scaling.  This will also require work in `Source/Main.c` and `Source/Questions.c`. */
 	SDL_PumpEvents();
 	click = (SDL_GetMouseState(&clickloc.x, &clickloc.y) & SDL_BUTTON_LMASK) ? true : false;
 

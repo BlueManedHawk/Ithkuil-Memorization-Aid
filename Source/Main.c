@@ -68,6 +68,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 			questions_render(screen, assptrs);
 			break;
 		}
+		/* TODO:  scaling.  This will also require work in `Source/Questions.c` and `Source/Menu.c`. */
 		SDL_LockSurface(screen);
 		SDL_LockTexture(screentex, NULL, &pixels, &pitch);
 		memmove(pixels, screen->pixels, pitch * screenheight * 8 / CHAR_BIT);
