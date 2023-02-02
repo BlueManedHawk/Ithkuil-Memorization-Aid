@@ -24,7 +24,6 @@ There isn't any way to install the program yet—but then again, this isn't a pr
 
 These two should hopefully be fixable before release N.1.
 
-- The timer doesn't do anything yet.
 - The window is fixed at a resolution of 480p36@4:3, and can't be scaled, which may lead to serious difficulty if you're lucky enough to have a fucknormously huge monitor.  I did try to fix this once, but i was unable to reconcile the discrepancies in the apparent and actual position of the cursor.  Note that when scaling is implemented, the software is still going to render at 480p36@4:3 so as to reduce resource usage and to not give an advantage to those rich enough to afford a fucknormously huge monitor.
 - The current color scheme is imperfect.
 - There's a piece of code that's copied in both the menu code and the questions code that should be in its own bit.

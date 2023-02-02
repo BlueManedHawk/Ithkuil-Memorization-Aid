@@ -27,12 +27,16 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <alloca.h>
+#include <signal.h>
+#include <unistd.h>
 
 static char * question;
 static char * answers[4];
 static short correct_ans_num = -1;
 static bool loadnext = true;
 static signed short selected = -1;
+
+static sig_atomic_t alarm_hit = false;
 
 static SDL_Surface * question_surface;
 static SDL_Surface * answer_surfaces[4];
@@ -123,6 +127,12 @@ static signed int jsongetkey(const char * req_key, json_value * obj)
 		}
 	}
 	return NULL;
+}
+
+void alarm_handler([[maybe_unused]] int dummy)
+{
+	alarm_hit = true;
+	signal(SIGALRM, alarm_handler);
 }
 
 void questions_render(SDL_Surface * screen, struct assptrs assptrs)
@@ -226,6 +236,7 @@ fukitol:
 		}
 
 		loadnext = false;
+		alarm(((struct extra*)screen->userdata)->timer);
 	}
 
 	if (!cached) [[clang::unlikely]] {
@@ -341,6 +352,16 @@ fukitol:
 				selected = -1;
 				loadnext = true;
 			});
+	}
+
+	if (alarm_hit && nextq_button->surfaces[0]->userdata == &nextq_button->surfaces[1]) {
+		alarm_hit = false;
+		selected = 5;
+		free_button(nextq_button);
+		nextq_button = alloc_button("Next question", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[2];
+		nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
+		nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
 	}
 
 	BLIT_APT_BUTTONSTATE(quitbutton, screen, clickloc, click, release, {SDL_PushEvent(&(SDL_Event){.type = SDL_QUIT});}); // could just directly set the quit state, but this is sillier and more fun

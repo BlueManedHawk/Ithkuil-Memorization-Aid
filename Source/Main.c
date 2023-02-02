@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include "../Libraries/json.h" // TODO:  _very_ unhappy about this
+#include <signal.h>
 
 #define ever ;; // hehehe
 
@@ -47,6 +48,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	atexit(TTF_Quit);
 
 	struct assptrs assptrs = load_assptrs();
+
+	signal(SIGALRM, alarm_handler);
 
 	SDL_Window * window = SDL_CreateWindow("ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenwidth, screenheight, 0);
 	SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);

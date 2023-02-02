@@ -21,5 +21,6 @@
 #include "Init.h"
 
 extern void questions_render(SDL_Surface *, struct assptrs);
+extern void alarm_handler(int);
 
 #endif
