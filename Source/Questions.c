@@ -226,12 +226,12 @@ fukitol:
 
 		TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
 		TTF_SetFontSize(assptrs.barlow_condensed, 16);
-		question_surface = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, question, (SDL_Color){0xff, 0xff, 0xff, 0xff}, screenwidth);
+		question_surface = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, question, (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, screenwidth);
 		TTF_SetFontSize(assptrs.barlow_condensed, 12);
 		int w;
 		for (register short i = 0; i < 4; i++) {
 			TTF_SizeUTF8(assptrs.barlow_condensed, answers[i], &w, NULL);
-			if ((answer_surfaces[i] = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, answers[i], (SDL_Color){0xff, 0xff, 0xff, 0xff}, screenwidth > w ? w : screenwidth)) == NULL)
+			if ((answer_surfaces[i] = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, answers[i], (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, screenwidth > w ? w : screenwidth)) == NULL)
 				fprintf(stderr, "Error in %s at %d:  %s\n", __func__, __LINE__, SDL_GetError());
 		}
 
@@ -240,20 +240,20 @@ fukitol:
 	}
 
 	if (!cached) [[clang::unlikely]] {
-		quitbutton = alloc_button("Quit", (SDL_Color){0xff, 0x44, 0x44, 0xff}, 12, assptrs.barlow_condensed);
+		quitbutton = alloc_button("Quit", (SDL_Color){0xFB, 0x49, 0x34, 0xFF}, 12, assptrs.barlow_condensed);
 		quitbutton->pos[0] = 6; quitbutton->pos[1] = screenheight - 6 - quitbutton->surfaces[0]->h;
-		backbutton = alloc_button("Back to main menu", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		backbutton = alloc_button("Back to main menu", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		backbutton->pos[1] = screenheight - 6 - backbutton->surfaces[0]->h;
 		backbutton->pos[0] = (screenwidth - backbutton->surfaces[0]->w) / 2;
-		nextq_button = alloc_button("Skip this question", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		nextq_button = alloc_button("Skip this question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[1]; // this is the terrible way by which it's differentiated whether the button is the skip button or the next question button; the next question button points to the second surface
 		nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
 		nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
-		timerbuttons[0] = alloc_button("↻", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		timerbuttons[0] = alloc_button("↻", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		timerbuttons[0]->pos[0] = screenwidth - 12 - timerbuttons[0]->surfaces[0]->w * 2; timerbuttons[0]->pos[1] = screenheight - 6 - (timerbuttons[0]->surfaces[0]->h * 2);
-		timerbuttons[1] = alloc_button("↑", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		timerbuttons[1] = alloc_button("↑", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		timerbuttons[1]->pos[0] = screenwidth - 6 - timerbuttons[1]->surfaces[0]->w; timerbuttons[1]->pos[1] = screenheight - 6 - (timerbuttons[1]->surfaces[0]->h * 2);
-		timerbuttons[2] = alloc_button("↓", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		timerbuttons[2] = alloc_button("↓", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		timerbuttons[2]->pos[0] = screenwidth - 6 - timerbuttons[2]->surfaces[0]->w; timerbuttons[2]->pos[1] = screenheight - 6 - timerbuttons[2]->surfaces[0]->h;
 		response_surface = SDL_CreateRGBSurfaceWithFormat(0, screenwidth, screenheight / 2, 32, SDL_PIXELFORMAT_RGBA32);
 		cached = true;
@@ -274,16 +274,16 @@ fukitol:
 		if (selected < 0) {
 			if (SDL_PointInRect(&clickloc, &dest)) {
 				if (click) {
-					SDL_FillRect(screen, &dest, SDL_MapRGBA(screen->format, 0x88, 0x88, 0x88, 0xff));
+					SDL_FillRect(screen, &dest, SDL_MapRGBA(screen->format, 0x50, 0x49, 0x45, 0xFF));
 				} else if (release) {
 					selected = i;
 					free_button(nextq_button);
-					nextq_button = alloc_button("Next question", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+					nextq_button = alloc_button("Next question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 					nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[2]; // see above where we cached the skip button for why we're doing this
 					nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
 					nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
 				} else {
-					SDL_FillRect(screen, &dest, SDL_MapRGBA(screen->format, 0x44, 0x44, 0x44, 0xff));
+					SDL_FillRect(screen, &dest, SDL_MapRGBA(screen->format, 0x3C, 0x38, 0x36, 0xFF));
 				}
 			}
 		}
@@ -294,20 +294,20 @@ fukitol:
 
 	if (selected > -1) {
 		if (selected != SHRT_MAX) {
-			SDL_FillRect(response_surface, NULL, SDL_MapRGBA(response_surface->format, 0, 0, 0, 0xff));
+			SDL_FillRect(response_surface, NULL, SDL_MapRGBA(response_surface->format, 0x28, 0x28, 0x28, 0xFF));
 			SDL_Surface * rw = NULL;
 			dest.y = 0;
 			if (selected == correct_ans_num) {
 				short i = rand() % (sizeof right / sizeof right[0] - 1);
 				TTF_SetFontSize(assptrs.barlow_condensed, 16);
-				rw = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, right[i], (SDL_Color){0x44, 0xff, 0x44, 0xff});
+				rw = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, right[i], (SDL_Color){0xB8, 0xBB, 0x26, 0xFF});
 				dest.x = (screenwidth - rw->w) / 2;
 				dest.w = rw->w; dest.h = rw->h;
 				SDL_BlitSurface(rw, NULL, response_surface, &dest);
 			} else {
 				short i = rand() % (sizeof wrong / sizeof wrong[0] - 1);
 				TTF_SetFontSize(assptrs.barlow_condensed, 16);
-				rw = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, wrong[i], (SDL_Color){0xff, 0x44, 0x44, 0xff});
+				rw = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, wrong[i], (SDL_Color){0xFB, 0x49, 0x34, 0xFF});
 				dest.x = (screenwidth - rw->w) / 2;
 				dest.w = rw->w; dest.h = rw->h;
 				SDL_BlitSurface(rw, NULL, response_surface, &dest);
@@ -318,7 +318,7 @@ fukitol:
 				TTF_SetFontSize(assptrs.barlow_condensed, 14);
 				dest.y += rw->h;
 				TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
-				rw = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, right_ans_txt, (SDL_Color){0xff, 0xff, 0xff, 0xff}, screenwidth);
+				rw = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, right_ans_txt, (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, screenwidth);
 				dest.x = (screenwidth - rw->w) / 2;
 				dest.w = rw->w; dest.h = rw->h;
 				SDL_BlitSurface(rw, NULL, response_surface, &dest);
@@ -337,7 +337,7 @@ fukitol:
 		BLIT_APT_BUTTONSTATE(nextq_button, screen, clickloc, click, release, {
 				selected = 5;
 				free_button(nextq_button);
-				nextq_button = alloc_button("Next question", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+				nextq_button = alloc_button("Next question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 				nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[2];
 				nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
 				nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
@@ -345,7 +345,7 @@ fukitol:
 	} else {
 		BLIT_APT_BUTTONSTATE(nextq_button, screen, clickloc, click, release, {
 				free_button(nextq_button);
-				nextq_button = alloc_button("Skip this question", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+				nextq_button = alloc_button("Skip this question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 				nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[1];
 				nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
 				nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
@@ -358,7 +358,7 @@ fukitol:
 		alarm_hit = false;
 		selected = 5;
 		free_button(nextq_button);
-		nextq_button = alloc_button("Next question", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		nextq_button = alloc_button("Next question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[2];
 		nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
 		nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
@@ -377,7 +377,7 @@ fukitol:
 		sprintf(timertxt, "No timer");
 	SDL_FreeSurface(timertxt_surface);
 	TTF_SetFontSize(assptrs.barlow_condensed, 12);
-	timertxt_surface = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, timertxt, (SDL_Color){0xff, 0xff, 0xff, 0xff});
+	timertxt_surface = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, timertxt, (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF});
 	dest.y = timerbuttons[2]->pos[1]; dest.x = timerbuttons[2]->pos[0] - timertxt_surface->w - 6;
 	dest.w = timertxt_surface->w; dest.h = timertxt_surface->h;
 	SDL_BlitSurface(timertxt_surface, NULL, screen, &dest);

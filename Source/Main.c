@@ -66,7 +66,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	for (ever) {
 		timespec_get(&firsttime, TIME_UTC); // For throttling FPS to reduce resource usage — see end of loop.
 
-		SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
+		SDL_SetRenderDrawColor(renderer, 0x28, 0x28, 0x28, 0xFF);
 		SDL_RenderClear(renderer);
 		switch (mode) {
 		case menu:
@@ -82,7 +82,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		memmove(pixels, screen->pixels, pitch * screenheight * 8 / CHAR_BIT);
 		SDL_UnlockTexture(screentex);
 		SDL_UnlockSurface(screen);
-		SDL_FillRect(screen, NULL, SDL_MapRGBA(screen->format, 0x00, 0x00, 0x00, 0xFF));
+		SDL_FillRect(screen, NULL, SDL_MapRGBA(screen->format, 0x28, 0x28, 0x28, 0xFF));
 		SDL_RenderCopy(renderer, screentex, NULL, NULL);
 		SDL_RenderPresent(renderer);
 

@@ -33,15 +33,15 @@ SDL_Surface * draw_button_with_text(enum buttonstate state, const char * txt, SD
 
 	switch (state){
 	case common:
-		sidecolor = SDL_MapRGBA(surface->format, 0x44, 0x44, 0x44, 0xFF);
-		topcolor = SDL_MapRGBA(surface->format, 0x66, 0x66, 0x66, 0xFF);
+		sidecolor = SDL_MapRGBA(surface->format, 0x3C, 0x38, 0x36, 0xFF);
+		topcolor = SDL_MapRGBA(surface->format, 0x50, 0x49, 0x45, 0xFF);
 		break;
 	case hovered:
-		sidecolor = SDL_MapRGBA(surface->format, 0x66, 0x66, 0x66, 0xFF);
-		topcolor = SDL_MapRGBA(surface->format, 0x88, 0x88, 0x88, 0xFF);
+		sidecolor = SDL_MapRGBA(surface->format, 0x50, 0x49, 0x45, 0xFF);
+		topcolor = SDL_MapRGBA(surface->format, 0x66, 0x5C, 0x54, 0xFF);
 		break;
 	case clicked:
-		sidecolor = SDL_MapRGBA(surface->format, 0x88, 0x88, 0x88, 0xFF);
+		sidecolor = SDL_MapRGBA(surface->format, 0x66, 0x5C, 0x54, 0xFF);
 		break;
 	}
 

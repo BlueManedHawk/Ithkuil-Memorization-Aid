@@ -72,7 +72,7 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 		/* TODO: it's a bit confusing how this actually works.  A rewrite may be in order. */
 		for (register long i = 0; i < assptrs.filetotal; i++){
 			categories = realloc(categories, (sizeof (struct buttondata) * (i+1)));
-			categories[i] = alloc_button(assptrs.filenames[i], (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+			categories[i] = alloc_button(assptrs.filenames[i], (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		}
 
 		int breaks[][2] = {0}; // [0] is used for location in assptrs.filetotal, whereas [1] is used for the location in pixels…i think.
@@ -104,21 +104,21 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 			}
 		}
 
-		quitbutton = alloc_button("Quit", (SDL_Color){0xff, 0x44, 0x44, 0xff}, 12, assptrs.barlow_condensed);
+		quitbutton = alloc_button("Quit", (SDL_Color){0xFB, 0x47, 0x34, 0xFF}, 12, assptrs.barlow_condensed);
 		quitbutton->pos[0] = 6; quitbutton->pos[1] = screenheight - 6 - quitbutton->surfaces[0]->h;
 
-		timer[0] = alloc_button("↑", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		timer[0] = alloc_button("↑", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		timer[0]->pos[0] = screenwidth - 6 - timer[0]->surfaces[0]->w; timer[0]->pos[1] = screenheight - 6 - (timer[0]->surfaces[0]->h * 2);
-		timer[1] = alloc_button("↓", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		timer[1] = alloc_button("↓", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		timer[1]->pos[0] = screenwidth - 6 - timer[1]->surfaces[0]->w; timer[1]->pos[1] = screenheight - 6 - timer[1]->surfaces[0]->h;
-		timer[2] = alloc_button("↻", (SDL_Color){0xff, 0xff, 0xff, 0xff}, 12, assptrs.barlow_condensed);
+		timer[2] = alloc_button("↻", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 		timer[2]->pos[0] = screenwidth - 12 - timer[2]->surfaces[0]->w * 2; timer[2]->pos[1] = screenheight - 6 - (timer[2]->surfaces[0]->h * 2);
 
 		timertxt_surface = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, "No timer", (SDL_Color){0xff, 0xff, 0xff, 0xff});
 
 		TTF_SetFontSize(assptrs.barlow_condensed, 24);
 		TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
-		toptext = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, "Welcome to ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls!  Please select a category.", (SDL_Color){0xff, 0xff, 0xff, 0xff}, screenwidth);
+		toptext = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, "Welcome to ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls!  Please select a category.", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, screenwidth);
 
 		cached = true;
 	}
@@ -144,7 +144,7 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 		sprintf(timertxt, "No timer");
 	SDL_FreeSurface(timertxt_surface);
 	TTF_SetFontSize(assptrs.barlow_condensed, 12);
-	timertxt_surface = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, timertxt, (SDL_Color){0xff, 0xff, 0xff, 0xff});
+	timertxt_surface = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, timertxt, (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF});
 	dest.y = timer[1]->pos[1]; dest.x = timer[1]->pos[0] - timertxt_surface->w - 6;
 	dest.w = timertxt_surface->w; dest.h = timertxt_surface->h;
 	SDL_BlitSurface(timertxt_surface, NULL, screen, &dest);
@@ -153,7 +153,7 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 	SDL_BlitSurface(toptext, NULL, screen, &dest);
 
 	const SDL_Rect mptr = {.x = clickloc.x, .y = clickloc.y, .w = 1, .h = 1};
-	SDL_FillRect(screen, &mptr, SDL_MapRGBA(screen->format, 0xFF, 0x00, 0x00, 0xFF));
+	SDL_FillRect(screen, &mptr, SDL_MapRGBA(screen->format, 0xFB, 0x49, 0x34, 0xFF));
 
 	if (((struct extra *)screen->userdata)->quit) menu_cleanup(assptrs);
 }
