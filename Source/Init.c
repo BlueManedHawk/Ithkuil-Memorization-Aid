@@ -1,13 +1,18 @@
 /* LICENSE
- * Copyright © 2022 Blue-Maned_Hawk.  All rights reserved.
  *
- * This project should have come with a file called `LICENSE`.  In the event of any conflict between this comment and that file, that file shall be considered the authority.
+ * Copyright © 2022, 2023 Blue-Maned_Hawk. All rights reserved.
  *
- * You may freely use this software.  You may freely distribute this software, so long as you distribute the license and source code with it.  You may freely modify this software and distribute the modifications under a similar license, so long as you distribute the sources with them and you don't claim that they're the original software.  None of this overrides local laws, and if you excercise these rights, you cannot claim that your actions are condoned by the author.
+ * You may freely use this work for any purpose, to the extent permitted by law. You may freely make this work available to others by any means, to the extent permitted by law. You may freely modify this work in any way, to the extent permitted by law. You may freely make works derived from this work available to others by any means, to the extent permitted by law.
  *
- * This license does not apply to patents or trademarks.
+ * Should you choose to exercise any of these rights, you must give clear and conspicuous attribution to the original author, and you must not make it seem in any way like the author condones your act of exercising these rights in any way.
  *
- * This software comes with no warranty, implied or explicit.  The author disclaims any liability for damages caused by this software. */
+ * Should you choose to exercise the second right listed above, you must make this license clearly and conspicuously available along with the original work, and you must clearly and conspicuously make the information necessary to reconstruct the work available along with the work.
+ *
+ * Should you choose to exercise the fourth right listed above, you must put any derived works you construct under a license that grants the same rights as this one under the same conditions and with the same restrictions, you must clearly and conspicuously make that license available alongside the work, you must clearly and conspicuously make the information necessary to reconstruct the work available alongside the work, you must clearly and conspicuously describe the changes which have been made from the original work, and you must not make it seem in any way like your derived works are the original work in any way.
+ *
+ * This license only applies to the copyright of this work, and does not apply to any other intellectual property rights, including but not limited to patent and trademark rights.
+ *
+ * THIS WORK COMES WITH ABSOLUTELY NO WARRANTY OF ANY KIND, IMPLIED OR EXPLICIT. THE AUTHOR DISCLAIMS ANY LIABILITY FOR ANY DAMAGES OF ANY KIND CAUSED DIRECTLY OR INDIRECTLY BY THIS WORK. */
 
 /* This file contains subroutines used in the initialization and deinitialization of the software. */
 
@@ -23,31 +28,30 @@
 
 /* This function returns a structure of pointers to the various assets.  Since this is a structure of pointers, it's small enough that we can just return it directly.
  *
- * The font is loaded immediately, since it's necessary all the time, but the files aren't loaded until they're needed, so the structure just returns the filenames.  */
+ * The font is loaded immediately, since it's necessary all the time, but the files aren't loaded until they're needed, so the structure just returns the filenames. */
 
-[[clang::optnone]] struct assptrs load_assptrs(void)
+struct assptrs load_assptrs(void)
 {
 	DIR * dir = opendir("./Assets");
-	if (dir == NULL) goto fail;
+	if (dir == NULL)
+		goto fail;
 
 	struct assptrs assptrs = {0};
 	assptrs.barlow_condensed = TTF_OpenFont("./Assets/BarlowCondensed-Regular.ttf", 12);
-	if (assptrs.barlow_condensed == NULL) goto fail;
+	if (assptrs.barlow_condensed == NULL)
+		goto fail;
 
 	assptrs.filenames = NULL;
 	struct dirent * dirent = NULL;
 	while ((dirent = readdir(dir)) != NULL) {
-		/* TODO:  This is probably horrifically innefficient.  Is there any better way to do this? */
-		char name[0b10'0000'0000] = "./Assets/";
-		strcat(name, dirent->d_name);
-		struct stat fstatus;
-		stat(name, &fstatus);
+		char name[0b10'0000'0000] = "./Assets/";  strcat(name, dirent->d_name);
+		struct stat fstatus;  stat(name, &fstatus);
 		char * buf = malloc(fstatus.st_size);
 		FILE * file = fopen(name, "r");
 		fread(buf, fstatus.st_size, 1, file);
 		fclose(file);
 		json_value * tree;
-		if ((tree = json_parse(buf, fstatus.st_size)) != NULL){
+		if ((tree = json_parse(buf, fstatus.st_size)) != NULL) {
 			json_value_free(tree);
 			long i = assptrs.filetotal;
 			assptrs.filenames = realloc(assptrs.filenames, sizeof (char *) * assptrs.filetotal + 1);
@@ -58,7 +62,8 @@
 		}
 		free(buf);
 	}
-	if (assptrs.filetotal == 0) goto fail;
+	if (assptrs.filetotal == 0)
+		goto fail;
 
 	return assptrs;
 

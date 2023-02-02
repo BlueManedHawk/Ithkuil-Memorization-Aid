@@ -1,14 +1,18 @@
 /* LICENSE
  *
- * Copyright © 2022 Blue-Maned_Hawk.  All rights reserved.
+ * Copyright © 2022, 2023 Blue-Maned_Hawk. All rights reserved.
  *
- * This project should have come with a file called `LICENSE`.  In the event of any conflict between this comment and that file, that file shall be considered the authority.
+ * You may freely use this work for any purpose, to the extent permitted by law. You may freely make this work available to others by any means, to the extent permitted by law. You may freely modify this work in any way, to the extent permitted by law. You may freely make works derived from this work available to others by any means, to the extent permitted by law.
  *
- * You may freely use this software.  You may freely distribute this software, so long as you distribute the license and source code with it.  You may freely modify this software and distribute the modifications under a similar license, so long as you distribute the sources with them and you don't claim that they're the original software.  None of this overrides local laws, and if you excercise these rights, you cannot claim that your actions are condoned by the author.
+ * Should you choose to exercise any of these rights, you must give clear and conspicuous attribution to the original author, and you must not make it seem in any way like the author condones your act of exercising these rights in any way.
  *
- * This license does not apply to patents or trademarks.
+ * Should you choose to exercise the second right listed above, you must make this license clearly and conspicuously available along with the original work, and you must clearly and conspicuously make the information necessary to reconstruct the work available along with the work.
  *
- * This software comes with no warranty, implied or explicit.  The author disclaims any liability for damages caused by this software. */
+ * Should you choose to exercise the fourth right listed above, you must put any derived works you construct under a license that grants the same rights as this one under the same conditions and with the same restrictions, you must clearly and conspicuously make that license available alongside the work, you must clearly and conspicuously make the information necessary to reconstruct the work available alongside the work, you must clearly and conspicuously describe the changes which have been made from the original work, and you must not make it seem in any way like your derived works are the original work in any way.
+ *
+ * This license only applies to the copyright of this work, and does not apply to any other intellectual property rights, including but not limited to patent and trademark rights.
+ *
+ * THIS WORK COMES WITH ABSOLUTELY NO WARRANTY OF ANY KIND, IMPLIED OR EXPLICIT. THE AUTHOR DISCLAIMS ANY LIABILITY FOR ANY DAMAGES OF ANY KIND CAUSED DIRECTLY OR INDIRECTLY BY THIS WORK. */
 
 /* This file deals with the questions portion of ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls. */
 
@@ -22,7 +26,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <inttypes.h>
-#include <stdbool.h> //TODO:  Once we can move to Clang 15, get this out of here.
+#include <alloca.h>
 
 static char * question;
 static char * answers[4];
@@ -53,9 +57,6 @@ static SDL_Surface * timertxt_surface;
 		free_button(timerbuttons[i]);
 }
 
-#if __has_c_attribute(unsequenced)
-[[unsequenced]]
-#endif
 /* This is a bit of an unintuitive interface, but i couldn't figure out how to get the type of the unnamed struct directly. */
 static signed int jsongetkey(const char * req_key, json_value * obj)
 {
@@ -100,11 +101,11 @@ static signed int jsongetkey(const char * req_key, json_value * obj)
 			char * replacement;
 			switch (file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->type) {
 			case json_integer:
-				replacement = __builtin_alloca(20 + 1); // maximum length of 64-bit integer + nul char
+				replacement = alloca(20 + 1); // maximum length of 64-bit integer + nul char
 				sprintf(replacement, "%" PRIdFAST64 "", file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->u.integer);
 				break;
 			case json_string:
-				replacement = __builtin_alloca(file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->u.string.length + 1);
+				replacement = alloca(file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->u.string.length + 1);
 				strcpy(replacement, file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->u.string.ptr);
 				break;
 			default:
@@ -181,8 +182,8 @@ fukitol:
 					break;
 			}
 		}
-		char * q = __builtin_alloca(strlen(question) + 1);  strcpy(q, question);
-		char * cor_ans = __builtin_alloca(assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.length + 1);  strcpy(cor_ans, assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.ptr);
+		char * q = alloca(strlen(question) + 1);  strcpy(q, question);
+		char * cor_ans = alloca(assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.length + 1);  strcpy(cor_ans, assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.ptr);
 		while (true) {
 			free(question);
 			free(answers[correct_ans_num]);

@@ -1,15 +1,21 @@
 LICENSE
 
-Copyright © 2022 Blue-Maned_Hawk.  All rights reserved.
+Copyright © 2022, 2023 Blue-Maned_Hawk. All rights reserved.
 
-This project is copylefted.  You may freely use this software for any purpose, to the extent permitted by law, so long as you do not claim that such use is condoned by the author.  You may freely make the usage of this software available to anyone, to the extent permitted by law, so long as you make this license and the source for this project clearly available, and you do not attempt to claim that such making of usage available is condoned by the author.  You may freely modify this software and make available for use such modified versions, to the extent permitted by law, so long as you put such modified versions under a license that grants the same rights as this one under the same conditions with the same restrictions, you make the source available for such modified versions, and you do not attempt to claim that the modified versions are the original version or that such modifications are condoned by the author.
+You may freely use this work for any purpose, to the extent permitted by law. You may freely make this work available to others by any means, to the extent permitted by law. You may freely modify this work in any way, to the extent permitted by law. You may freely make works derived from this work available to others by any means, to the extent permitted by law.
 
-This license does not apply to patents or trademarks.
+Should you choose to exercise any of these rights, you must give clear and conspicuous attribution to the original author, and you must not make it seem in any way like the author condones your act of exercising these rights in any way.
+
+Should you choose to exercise the second right listed above, you must make this license clearly and conspicuously available along with the original work, and you must clearly and conspicuously make the information necessary to reconstruct the work available along with the work.
+
+Should you choose to exercise the fourth right listed above, you must put any derived works you construct under a license that grants the same rights as this one under the same conditions and with the same restrictions, you must clearly and conspicuously make that license available alongside the work, you must clearly and conspicuously make the information necessary to reconstruct the work available alongside the work, you must clearly and conspicuously describe the changes which have been made from the original work, and you must not make it seem in any way like your derived works are the original work in any way.
+
+This license only applies to the copyright of this work, and does not apply to any other intellectual property rights, including but not limited to patent and trademark rights.
+
+THIS WORK COMES WITH ABSOLUTELY NO WARRANTY OF ANY KIND, IMPLIED OR EXPLICIT. THE AUTHOR DISCLAIMS ANY LIABILITY FOR ANY DAMAGES OF ANY KIND CAUSED DIRECTLY OR INDIRECTLY BY THIS WORK.
 
 This project makes use of Barlow Condensed, licensed by the Barlow Project Authors under the SIL Open Font License v1.1, available to view here:  https://github.com/jpt/barlow/blob/main/OFL.txt.
 
 This project makes use of SDL 2.0.20 and SDL_ttf 2.20.0, both licensed by Sam Lantinga under separate instances of the zlib license, available to view heres:  https://www.libsdl.org/license.php and https://github.com/libsdl-org/SDL_ttf/blob/main/LICENSE.txt.
 
 This project makes use of json-parser, licensed by the json-parser authors under the BSD 2-Clause license, available to view here:  https://github.com/json-parser/json-parser/blob/master/LICENSE.
-
-THIS PRODUCT COMES WITH ABSOLUTELY NO WARRANTY, IMPLIED OR EXPLICIT, TO THE EXTENT PERMITTED BY LAW.  THE AUTHOR DISCLAIMS ANY LIABILITY FOR ANY DAMAGES OF ANY KIND CAUSED BY THIS PRODUCT, TO THE EXTENT PERMITTED BY LAW.

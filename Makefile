@@ -17,7 +17,7 @@ ifneq (,)
 This makefile requires GNU Make.
 endif
 
-CC = clang-13
+CC = clang-15
 CFLAGS = -Werror -Wall -Wextra -pedantic -Wno-gnu-binary-literal # Standardized by paper N2549 in C2x, yet Clang doesn't accept them.
 CFLAGS += -std=c2x -glldb ` sdl2-config --cflags ` -Og
 LDFLAGS = ` sdl2-config --libs ` -lSDL2_ttf -lm
