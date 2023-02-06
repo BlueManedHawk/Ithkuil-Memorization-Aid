@@ -23,6 +23,7 @@ endif
 
 CC = clang-15
 CFLAGS = -Werror -Wall -Wextra -pedantic
+CFLAGS += -Wno-gnu-binary-literal # Workaround for an issue with Clang.
 CFLAGS += -std=c2x -glldb ` sdl2-config --cflags ` -Og
 LDFLAGS = ` sdl2-config --libs ` -lSDL2_ttf -lm
 SRC = $(wildcard Source/*.c Libraries/*.c)

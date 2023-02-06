@@ -32,12 +32,6 @@
 
 #define ever ;; // hehehe
 
-enum [[clang::enum_extensibility(closed)]] mode {
-	menu,
-	questions
-};
-
-
 int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 {
 	/* I'm aware that `rand()` is a terrible method of randomness, much as i am also aware that this is a terrible method of seeding the pool.  However, when i tried to use `/dev/random` or `/dev/urandom` (via syscall or file!) instead of `rand()`, it would _always_ completely and entirely block the entire program. */
@@ -54,7 +48,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	SDL_Window * window = SDL_CreateWindow("ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenwidth, screenheight, 0);
 	SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
 
-	enum mode mode = menu;
+	bool inmenu = true;
 	struct timespec firsttime, secondtime;
 	SDL_Surface * screen = SDL_CreateRGBSurfaceWithFormat(0, screenwidth, screenheight, 32, SDL_PIXELFORMAT_RGBA32);
 	SDL_SetSurfaceRLE(screen, true);
@@ -68,14 +62,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 
 		SDL_SetRenderDrawColor(renderer, 0x28, 0x28, 0x28, 0xFF);
 		SDL_RenderClear(renderer);
-		switch (mode) {
-		case menu:
+		if (inmenu)
 			menu_render(screen, assptrs);
-			break;
-		case questions:
+		else
 			questions_render(screen, assptrs);
-			break;
-		}
 		/* TODO:  scaling.  This will also require work in `Source/Questions.c` and `Source/Menu.c`. */
 		SDL_LockSurface(screen);
 		SDL_LockTexture(screentex, NULL, &pixels, &pitch);
@@ -106,7 +96,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		}
 		if (((struct extra *)screen->userdata)->quit) break;
 		if (((struct extra *)screen->userdata)->swap) {
-			mode = (mode == menu) ? questions : menu;
+			inmenu =! inmenu;
 			((struct extra *)screen->userdata)->swap = false;
 		}
 

@@ -329,7 +329,16 @@ fukitol:
 		SDL_BlitSurface(response_surface, NULL, screen, &dest);
 	}
 
-	BLIT_APT_BUTTONSTATE(backbutton, screen, clickloc, click, release, {((struct extra *)screen->userdata)->swap = true;  loadnext = true;});
+	BLIT_APT_BUTTONSTATE(backbutton, screen, clickloc, click, release, {
+			((struct extra *)screen->userdata)->swap = true;
+			free_button(nextq_button);
+			nextq_button = alloc_button("Skip this question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
+			nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[1];
+			nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
+			nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
+			selected = -1;
+			loadnext = true;
+		});
 
 	if (nextq_button->surfaces[0]->userdata == &nextq_button->surfaces[1]) {
 		BLIT_APT_BUTTONSTATE(nextq_button, screen, clickloc, click, release, {
@@ -368,9 +377,9 @@ fukitol:
 	BLIT_APT_BUTTONSTATE(timerbuttons[2], screen, clickloc, click, release, {if (((struct extra *)screen->userdata)->timer != 0) ((struct extra *)screen->userdata)->timer--;});
 	BLIT_APT_BUTTONSTATE(timerbuttons[1], screen, clickloc, click, release, {((struct extra *)screen->userdata)->timer++;});
 
-	char timertxt[7 + 6 + 1]; // space for words + 16-bit largest integer length as string + NUL
+	char timertxt[15 + 6 + 1]; // space for words + 16-bit largest integer length as string + NUL
 	if (((struct extra *)screen->userdata)->timer != 0)
-		sprintf(timertxt, "Timer: %d", ((struct extra *)(screen->userdata))->timer);
+		sprintf(timertxt, "Timer: %d seconds", ((struct extra *)(screen->userdata))->timer);
 	else
 		sprintf(timertxt, "No timer");
 	SDL_FreeSurface(timertxt_surface);

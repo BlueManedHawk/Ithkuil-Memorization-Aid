@@ -118,7 +118,7 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 
 		TTF_SetFontSize(assptrs.barlow_condensed, 24);
 		TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
-		toptext = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, "Welcome to ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls!  Please select a category.", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, screenwidth);
+		toptext = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, "Welcome to ëšho'hlorżûţc hwomùaržrıtéu-erţtenļıls!  Please select a category.", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, screenwidth);
 
 		cached = true;
 	}
@@ -137,9 +137,9 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 	BLIT_APT_BUTTONSTATE(timer[1], screen, clickloc, click, release, {if (((struct extra *)screen->userdata)->timer != 0) ((struct extra *)screen->userdata)->timer--;});
 	BLIT_APT_BUTTONSTATE(timer[0], screen, clickloc, click, release, {((struct extra *)screen->userdata)->timer++;});
 
-	char timertxt[7 + 6 + 1]; // space for words + 16-bit largest integer length as string + NUL
+	char timertxt[15 + 6 + 1]; // space for words + 16-bit largest integer length as string + NUL
 	if (((struct extra *)(screen->userdata))->timer != 0)
-		sprintf(timertxt, "Timer: %d", ((struct extra *)screen->userdata)->timer);
+		sprintf(timertxt, "Timer: %d seconds", ((struct extra *)screen->userdata)->timer);
 	else
 		sprintf(timertxt, "No timer");
 	SDL_FreeSurface(timertxt_surface);
