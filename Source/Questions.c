@@ -16,6 +16,8 @@
 
 /* This file deals with the questions portion of ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls. */
 
+#define __STDC_WANT_IEC_60559_BFP_EXT__ 1 // Required by glibc to get SIG_ATOMIC_WIDTH for some reason.
+
 #include "SDL.h"
 #include "Questions.h"
 #include "Init.h"
@@ -29,6 +31,7 @@
 #include <alloca.h>
 #include <signal.h>
 #include <unistd.h>
+#include <stdint.h>
 
 static char * question;
 static char * answers[4];
@@ -36,7 +39,7 @@ static short correct_ans_num = -1;
 static bool loadnext = true;
 static signed short selected = -1;
 
-static sig_atomic_t alarm_hit = false;
+static volatile sig_atomic_t alarm_left = 0;
 
 static SDL_Surface * question_surface;
 static SDL_Surface * answer_surfaces[4];
@@ -49,8 +52,9 @@ static const char * right[] = {"Yes.", "Yep.", "yeah", "Yep!", "Correct!"};
 static bool cached;
 /* `nextq_button` is used for both the skip button and the next question button—`nextq_button` is the name closest to reality that's still short and in the spirit of the language. */
 /* TODO:  The quit button and timer appear in both modes.  Ideally, they would be handled by the main function instead of each mode handling them separately using the same code. */
+/* TODO:  The timer buttons shouldn't use text. */
 static struct buttondata * quitbutton, * backbutton, * nextq_button, * timerbuttons[3];
-static SDL_Surface * timertxt_surface;
+static SDL_Surface * timertxt_surface, * timeleft_text;
 
 [[gnu::cold]] static void questions_cleanup(void)
 {
@@ -129,8 +133,10 @@ static signed int jsongetkey(const char * req_key, json_value * obj)
 
 void alarm_handler([[maybe_unused]] int dummy)
 {
-	alarm_hit = true;
+	alarm_left--;
 	signal(SIGALRM, alarm_handler);
+	if (alarm_left)
+		alarm(1);
 }
 
 void questions_render(SDL_Surface * screen, struct assptrs assptrs)
@@ -234,7 +240,7 @@ fukitol:
 		}
 
 		loadnext = false;
-		alarm(((struct extra*)screen->userdata)->timer);
+		alarm_left = ((struct extra *)screen->userdata)->timer;  alarm(1);
 	}
 
 	if (!cached) [[clang::unlikely]] {
@@ -290,6 +296,31 @@ fukitol:
 		dest.y += answer_surfaces[i]->h;
 	}
 
+	/* This doesn't work, but it appears to be harmless. */
+	char txt[
+#if SIG_ATOMIC_WIDTH == 16
+		5
+#elif SIG_ATOMIC_WIDTH == 32
+		10
+#elif SIG_ATOMIC_WIDTH == 64
+		20
+#elif SIG_ATOMIC_WIDTH == 128
+		39
+#elif SIG_ATOMIC_WIDTH == 256
+		78
+#else
+		ceil(SIG_ATOMIC_WIDTH * log(2) / log(10))
+#endif
+	];  sprintf(txt, "%d", alarm_left);
+	SDL_FreeSurface(timeleft_text);
+	TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
+	TTF_SetFontSize(assptrs.barlow_condensed, 16);
+	timeleft_text = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, txt, (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, screenwidth);
+	TTF_SetFontSize(assptrs.barlow_condensed, 12);
+	dest.x = 0;  dest.y = screenheight - backbutton->surfaces[0]->h - nextq_button->surfaces[0]->h - 2 * 6;
+	dest.w = timeleft_text->w;  dest.h = timeleft_text->h;
+	SDL_BlitSurface(timeleft_text, NULL, screen, &dest);
+
 	if (selected > -1) {
 		if (selected != SHRT_MAX) {
 			SDL_FillRect(response_surface, NULL, SDL_MapRGBA(response_surface->format, 0x28, 0x28, 0x28, 0xFF));
@@ -340,6 +371,15 @@ fukitol:
 			loadnext = true;
 		});
 
+	if (!alarm_left && ((struct extra *)screen->userdata)->timer && nextq_button->surfaces[0]->userdata == &nextq_button->surfaces[1]) {
+		selected = 5;
+		free_button(nextq_button);
+		nextq_button = alloc_button("Next question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
+		nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[2];
+		nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
+		nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
+	}
+
 	if (nextq_button->surfaces[0]->userdata == &nextq_button->surfaces[1]) {
 		BLIT_APT_BUTTONSTATE(nextq_button, screen, clickloc, click, release, {
 				selected = 5;
@@ -361,16 +401,6 @@ fukitol:
 			});
 	}
 
-	if (alarm_hit && nextq_button->surfaces[0]->userdata == &nextq_button->surfaces[1]) {
-		alarm_hit = false;
-		selected = 5;
-		free_button(nextq_button);
-		nextq_button = alloc_button("Next question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
-		nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[2];
-		nextq_button->pos[1] = screenheight - 12 - nextq_button->surfaces[0]->h - backbutton->surfaces[0]->h;
-		nextq_button->pos[0] = (screenwidth - nextq_button->surfaces[0]->w) / 2;
-	}
-
 	BLIT_APT_BUTTONSTATE(quitbutton, screen, clickloc, click, release, {SDL_PushEvent(&(SDL_Event){.type = SDL_QUIT});}); // could just directly set the quit state, but this is sillier and more fun
 
 	BLIT_APT_BUTTONSTATE(timerbuttons[0], screen, clickloc, click, release, {((struct extra *)screen->userdata)->timer = 0;});
@@ -389,5 +419,6 @@ fukitol:
 	dest.w = timertxt_surface->w; dest.h = timertxt_surface->h;
 	SDL_BlitSurface(timertxt_surface, NULL, screen, &dest);
 
-	if (((struct extra *)screen->userdata)->quit) questions_cleanup();
+	if (((struct extra *)screen->userdata)->quit)
+		questions_cleanup();
 }
