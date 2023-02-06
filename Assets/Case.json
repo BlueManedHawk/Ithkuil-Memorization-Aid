@@ -368,7 +368,7 @@
 			"vc":"oë",
 			"desc":"That which is used as a resource (not a catalyst) for another formative",
 			"ass":"That by which X is used as a resource (not a catalyst).",
-			"inv_ass":"That which is used as a resource (not a catalys) for X.",
+			"inv_ass":"That which is used as a resource (not a catalyst) for X.",
 			"asscs":"w",
 			"cat":"Adverbial",
 			"cat_ord":5

@@ -12,7 +12,7 @@ This is not a big, fancy, professional project.  This is just something I'm doin
 
 ## Building
 
-To build, you will need a Linux-based operating system that complies with the latest version of POSIX.  You will also need a copy of Clang 13, and you need to have the latest versions of SDL2 and SDL\_ttf installed—since you're building from scratch, you'll also need the development files.  Installing these is rather system-specific, so if you can't figure it out, please ask in the appropriate place for your system, not here.  Finally, be warned that this was developed with glibc, and may not work with musl.
+To build, you will need a Linux-based operating system that complies with the latest version of POSIX.  You will also need a copy of Clang 15, and you need to have the latest versions of SDL2 and SDL\_ttf installed—since you're building from scratch, you'll also need the development files.  Installing these is rather system-specific, so if you can't figure it out, please ask in the appropriate place for your system, not here.  Finally, be warned that this was developed with glibc, and may not work with musl or other libcs.
 
 If you cannot build for your system, please file an issue.  I will be happy to work on porting the software to any _open and actively maintained_ systems out there.
 
@@ -26,16 +26,15 @@ These two should hopefully be fixable before release N.1.
 
 - The window is fixed at a resolution of 480p36@4:3, and can't be scaled, which may lead to serious difficulty if you're lucky enough to have a fucknormously huge monitor.  I did try to fix this once, but i was unable to reconcile the discrepancies in the apparent and actual position of the cursor.  Note that when scaling is implemented, the software is still going to render at 480p36@4:3 so as to reduce resource usage and to not give an advantage to those rich enough to afford a fucknormously huge monitor.
 - There's a piece of code that's copied in both the menu code and the questions code that should be in its own bit.
+- The current JSON library has an unpleasant interface that should be replaced with a better one.
+- Seemingly random freezes can sometimes occur.  While the process can be harmlessly killed and restarted, this is annoying.
 
 The rest of these will probably need to wait.
 
 - Some of the glyphs that Ithkuil uses don't exist in the font that the software uses, Barlow Condensed.
-- After switching categories, you still need to answer another question in the previous category for the change to take effect.
 - The current color scheme is Gruvbox, which 0. is uncertaintly defined, Ⓑ doesn't map perfectly to sixteen colors (a fact used by this very software), and IV.) is _warm_.  All of these problems need to be fixed.
 - The asset format (see [below](https://github.com/BlueManedHawk/Ithkuil-Memorization-Aid#asset-format)) works okay for now, but it will almost certainly need to change in the future to adapt to whatever requirements we end up stumbling across.
-- The current JSON library has an unpleasant interface that should be replaced with a better one.
 - SDL may not have been the best choice.
-- Seemingly random freezes can sometimes occur.  While the process can be harmlessly killed and restarted, this is annoying.
 - Perhaps most obviously, the software currently only has files for the aspects and the cases.  Digitizing the entire language will take a long time (though admittedly most of that will be from the lexicon and the VxCs affixes), and more importantly, figuring out what the best way to organize everything is will be its own ball of fish. Eventually, this might even evolve into a completely separate project.
 
 ## Asset Format

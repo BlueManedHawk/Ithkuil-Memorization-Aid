@@ -73,12 +73,12 @@ static signed int jsongetkey(const char * req_key, json_value * obj)
 [[gnu::cold]] static char * replace_substrings(json_value * file, char * str, short num)
 {
 	for (register unsigned long i = 0; i < strlen(str); i++) {
-		if (str[i] == '\xc2' && str[i + 1] == '\x98') { // Direct comparison of UTF-8 bytes due to restrictions on control-character unicode escape sequences—this is also the case a few lines down.
+		if (!strncmp(&str[i], "\xC2\x98", 2)) {
 			char * substring = NULL;
 			unsigned short y;
 			bool has_ST = false;
 			for (y = i + 2; y < strlen(str); y++) {
-				if (str[y] == '\xc2' && str[y + 1] == '\x9c') {
+				if (!strncmp(&str[y], "\xC2\x9C", 2)) {
 					has_ST = true;
 					break;
 				}
@@ -117,10 +117,8 @@ static signed int jsongetkey(const char * req_key, json_value * obj)
 				errno = ENOMSG;
 				return NULL;
 			}
-			char * betterstring = malloc(strlen(str) + strlen(replacement) + 2);
-			str[i] = '\0'; // One potential concern that i have with this method of doing things is that i'm worried that there's going to be some sort of optimization whereupon the compiler will think that since i've ended the string at this point now it's now okay to use the bits of the string beyond this point for other stuff.  I mean, i don't think that this is happening at the moment, but with programs getting shittier despite increasing demand for performance, i wouldn't be surprised if the people designing the optimizers start to get desperate.
-			strcpy(betterstring, str);
-			str[i] = '\xc2';
+			char * betterstring = malloc(strlen(str) + strlen(replacement) + 3);
+			str[i] = '\0';  strcpy(betterstring, str);  str[i] = '\xC2';  //I tried to replace this line with a call to `strncpy()` instead, but it ended up causing, of all thing, _memory corruption_, somehow.  So uh.  Don't do that, i guess?
 			strcat(betterstring, replacement);
 			strcat(betterstring, &str[y]);
 			return betterstring;
@@ -331,7 +329,7 @@ fukitol:
 		SDL_BlitSurface(response_surface, NULL, screen, &dest);
 	}
 
-	BLIT_APT_BUTTONSTATE(backbutton, screen, clickloc, click, release, {((struct extra *)screen->userdata)->swap = true;});
+	BLIT_APT_BUTTONSTATE(backbutton, screen, clickloc, click, release, {((struct extra *)screen->userdata)->swap = true;  loadnext = true;});
 
 	if (nextq_button->surfaces[0]->userdata == &nextq_button->surfaces[1]) {
 		BLIT_APT_BUTTONSTATE(nextq_button, screen, clickloc, click, release, {
