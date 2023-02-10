@@ -27,7 +27,7 @@ These two should hopefully be fixable before release N.1.
 - The window is fixed at a resolution of 480p36@4:3, and can't be scaled, which may lead to serious difficulty if you're lucky enough to have a fucknormously huge monitor.  I did try to fix this once, but i was unable to reconcile the discrepancies in the apparent and actual position of the cursor.  Note that when scaling is implemented, the software is still going to render at 480p36@4:3 so as to reduce resource usage.
 - There's a piece of code that's copied in both the menu code and the questions code that should be in its own bit.
 - The current JSON library has an unpleasant interface that should be replaced with a better one.
-- Seemingly random freezes can sometimes occur.  While the process can be harmlessly killed and restarted, this is annoying.
+- Probably some bits could do with a little optimization.
 
 The rest of these will probably need to wait.
 

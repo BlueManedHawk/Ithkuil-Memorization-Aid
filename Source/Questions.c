@@ -213,7 +213,7 @@ fukitol:
 			for (register int j = i + 1; j < 4; j++)
 				if (!strcmp(answers[i], answers[j])) {
 					register int toreplace = correct_ans_num == j ? i : j;
-					char incor_ans[assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.length + 1];  strcpy(cor_ans, assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.ptr);
+					char incor_ans[assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.length + 1];  strcpy(incor_ans, assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.ptr);
 					while (true) {
 						free(answers[toreplace]);
 						x = rand() % (assptrs.curfile->u.object.values[data_loc].value->u.array.length - 1);
