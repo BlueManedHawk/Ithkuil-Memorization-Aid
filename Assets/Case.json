@@ -17,7 +17,7 @@
 			"tla":"THM",
 			"vc":"a",
 			"semrole":"CONTENT",
-			"desc":"A participant to the verbal that does not tangibly change in state.",
+			"desc":"A participant to the verbal predicate that does not tangibly change in state.",
 			"ass":"The party with the semantic role of the CONTENT for X.",
 			"inv_ass":"That for which X fulfills the CONTENT semantic role.",
 			"asscs":"w",

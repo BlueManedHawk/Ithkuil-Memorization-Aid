@@ -48,7 +48,7 @@ static void menu_cleanup(struct assptrs assptrs)
 		free_button(timer[i]);
 }
 
-void menu_render(SDL_Surface * screen, struct assptrs assptrs)
+void menu_render(SDL_Surface * screen, struct assptrs assptrs, struct extra * extra)
 {
 	SDL_Event e;
 	SDL_Point clickloc = {0};
@@ -57,7 +57,7 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 	while (SDL_PollEvent(&e)){
 		switch (e.type){
 		case SDL_QUIT:
-			((struct extra *)screen->userdata)->quit = true;
+			extra->quit = true;
 			break;
 		case SDL_MOUSEBUTTONUP:
 			if (e.button.button == SDL_BUTTON_LEFT)
@@ -126,20 +126,20 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 	SDL_Rect dest = {0};
 	for (register long i = 0; i < assptrs.filetotal; i++) {
 		BLIT_APT_BUTTONSTATE(categories[i], screen, clickloc, click, release, {
-				((struct extra *)screen->userdata)->swap = true;
-				((struct extra *)screen->userdata)->filereq = i;
+				extra->swap = true;
+				extra->filereq = i;
 			});
 	}
 
 	BLIT_APT_BUTTONSTATE(quitbutton, screen, clickloc, click, release, {SDL_PushEvent(&(SDL_Event){.type = SDL_QUIT});});  // could just directly set the quit state, but this is sillier and more fun
 
-	BLIT_APT_BUTTONSTATE(timer[2], screen, clickloc, click, release, {((struct extra *)screen->userdata)->timer = 0;});
-	BLIT_APT_BUTTONSTATE(timer[1], screen, clickloc, click, release, {if (((struct extra *)screen->userdata)->timer != 0) ((struct extra *)screen->userdata)->timer--;});
-	BLIT_APT_BUTTONSTATE(timer[0], screen, clickloc, click, release, {((struct extra *)screen->userdata)->timer++;});
+	BLIT_APT_BUTTONSTATE(timer[2], screen, clickloc, click, release, {extra->timer = 0;});
+	BLIT_APT_BUTTONSTATE(timer[1], screen, clickloc, click, release, {if (extra->timer != 0) extra->timer--;});
+	BLIT_APT_BUTTONSTATE(timer[0], screen, clickloc, click, release, {extra->timer++;});
 
 	char timertxt[15 + 6 + 1]; // space for words + 16-bit largest integer length as string + NUL
-	if (((struct extra *)(screen->userdata))->timer != 0)
-		sprintf(timertxt, "Timer: %d seconds", ((struct extra *)screen->userdata)->timer);
+	if (extra->timer != 0)
+		sprintf(timertxt, "Timer: %d seconds", extra->timer);
 	else
 		sprintf(timertxt, "No timer");
 	SDL_FreeSurface(timertxt_surface);
@@ -155,5 +155,5 @@ void menu_render(SDL_Surface * screen, struct assptrs assptrs)
 	const SDL_Rect mptr = {.x = clickloc.x, .y = clickloc.y, .w = 1, .h = 1};
 	SDL_FillRect(screen, &mptr, SDL_MapRGBA(screen->format, 0xFB, 0x49, 0x34, 0xFF));
 
-	if (((struct extra *)screen->userdata)->quit) menu_cleanup(assptrs);
+	if (extra->quit) menu_cleanup(assptrs);
 }

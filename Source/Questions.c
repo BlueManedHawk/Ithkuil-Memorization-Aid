@@ -124,7 +124,7 @@ void alarm_handler([[maybe_unused]] int dummy)
 		alarm(1);
 }
 
-void questions_render(SDL_Surface * screen, struct assptrs assptrs)
+void questions_render(SDL_Surface * screen, struct assptrs assptrs, struct extra * extra)
 {
 	SDL_Event e = {0};
 	bool click = false;
@@ -133,7 +133,7 @@ void questions_render(SDL_Surface * screen, struct assptrs assptrs)
 	while (SDL_PollEvent(&e)){
 		switch (e.type){
 		case SDL_QUIT:
-			((struct extra *)screen->userdata)->quit = true;
+			extra->quit = true;
 			break;
 		case SDL_MOUSEBUTTONUP:
 			if (e.button.button == SDL_BUTTON_LEFT)
@@ -217,7 +217,7 @@ fukitol:
 		}
 
 		loadnext = false;
-		alarm_left = ((struct extra *)screen->userdata)->timer;  alarm(1);
+		alarm_left = extra->timer;  alarm(1);
 	}
 
 	if (!cached) [[clang::unlikely]] {
@@ -324,7 +324,7 @@ fukitol:
 	}
 
 	BLIT_APT_BUTTONSTATE(backbutton, screen, clickloc, click, release, {
-			((struct extra *)screen->userdata)->swap = true;
+			extra->swap = true;
 			free_button(nextq_button);
 			nextq_button = alloc_button("Skip this question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
 			nextq_button->surfaces[0]->userdata = &nextq_button->surfaces[1];
@@ -334,7 +334,7 @@ fukitol:
 			loadnext = true;
 		});
 
-	if (!alarm_left && ((struct extra *)screen->userdata)->timer && nextq_button->surfaces[0]->userdata == &nextq_button->surfaces[1]) {
+	if (!alarm_left && extra->timer && nextq_button->surfaces[0]->userdata == &nextq_button->surfaces[1]) {
 		selected = 5;
 		free_button(nextq_button);
 		nextq_button = alloc_button("Next question", (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, 12, assptrs.barlow_condensed);
@@ -366,13 +366,13 @@ fukitol:
 
 	BLIT_APT_BUTTONSTATE(quitbutton, screen, clickloc, click, release, {SDL_PushEvent(&(SDL_Event){.type = SDL_QUIT});}); // could just directly set the quit state, but this is sillier and more fun
 
-	BLIT_APT_BUTTONSTATE(timerbuttons[0], screen, clickloc, click, release, {((struct extra *)screen->userdata)->timer = 0;});
-	BLIT_APT_BUTTONSTATE(timerbuttons[2], screen, clickloc, click, release, {if (((struct extra *)screen->userdata)->timer != 0) ((struct extra *)screen->userdata)->timer--;});
-	BLIT_APT_BUTTONSTATE(timerbuttons[1], screen, clickloc, click, release, {((struct extra *)screen->userdata)->timer++;});
+	BLIT_APT_BUTTONSTATE(timerbuttons[0], screen, clickloc, click, release, {extra->timer = 0;});
+	BLIT_APT_BUTTONSTATE(timerbuttons[2], screen, clickloc, click, release, {if (extra->timer != 0) extra->timer--;});
+	BLIT_APT_BUTTONSTATE(timerbuttons[1], screen, clickloc, click, release, {extra->timer++;});
 
 	char timertxt[15 + 6 + 1]; // space for words + 16-bit largest integer length as string + NUL
-	if (((struct extra *)screen->userdata)->timer != 0)
-		sprintf(timertxt, "Timer: %d seconds", ((struct extra *)(screen->userdata))->timer);
+	if (extra->timer != 0)
+		sprintf(timertxt, "Timer: %d seconds", extra->timer);
 	else
 		sprintf(timertxt, "No timer");
 	SDL_FreeSurface(timertxt_surface);
@@ -382,6 +382,6 @@ fukitol:
 	dest.w = timertxt_surface->w; dest.h = timertxt_surface->h;
 	SDL_BlitSurface(timertxt_surface, NULL, screen, &dest);
 
-	if (((struct extra *)screen->userdata)->quit)
+	if (extra->quit)
 		questions_cleanup();
 }

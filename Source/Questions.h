@@ -20,7 +20,7 @@
 #include "SDL.h"
 #include "Init.h"
 
-extern void questions_render(SDL_Surface *, struct assptrs);
+extern void questions_render(SDL_Surface *, struct assptrs, struct extra *);
 extern void alarm_handler(int);
 
 #endif

@@ -52,7 +52,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	SDL_SetSurfaceRLE(screen, true);
 	struct extra extra = {0};
 	extra.filereq = -1;
-	screen->userdata = &extra;
 	SDL_Texture * screentex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, screenwidth, screenheight);
 	void * pixels; int pitch;
 #define ever ;;
@@ -63,9 +62,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		SDL_SetRenderDrawColor(renderer, 0x28, 0x28, 0x28, 0xFF);
 		SDL_RenderClear(renderer);
 		if (inmenu)
-			menu_render(screen, assptrs);
+			menu_render(screen, assptrs, &extra);
 		else
-			questions_render(screen, assptrs);
+			questions_render(screen, assptrs, &extra);
 		/* TODO:  scaling.  This will also require work in `Source/Questions.c` and `Source/Menu.c`. */
 		SDL_LockSurface(screen);
 		SDL_LockTexture(screentex, NULL, &pixels, &pitch);
@@ -76,10 +75,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		SDL_RenderCopy(renderer, screentex, NULL, NULL);
 		SDL_RenderPresent(renderer);
 
-		if (((struct extra *)screen->userdata)->filereq >= 0) {
+		if (extra.filereq >= 0) {
 			free(assptrs.curfile);
 			char fname[0b10'0000'0000] = "./Assets/";
-			strcat(fname, assptrs.filenames[((struct extra *)screen->userdata)->filereq]);
+			strcat(fname, assptrs.filenames[extra.filereq]);
 			strcat(fname, ".json");
 			struct stat fstatus = {0};
 			stat(fname, &fstatus);
@@ -91,10 +90,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		} else {
 			free(assptrs.curfile);  assptrs.curfile = NULL;
 		}
-		if (((struct extra *)screen->userdata)->quit) break;
-		if (((struct extra *)screen->userdata)->swap) {
+		if (extra.quit) break;
+		if (extra.swap) {
 			inmenu =! inmenu;
-			((struct extra *)screen->userdata)->swap = false;
+			extra.swap = false;
 		}
 
 		timespec_get(&secondtime, TIME_UTC);

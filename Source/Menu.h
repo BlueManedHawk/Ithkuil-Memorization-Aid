@@ -20,6 +20,6 @@
 #include "SDL.h"
 #include "Init.h"
 
-extern void menu_render(SDL_Surface *, struct assptrs);
+extern void menu_render(SDL_Surface *, struct assptrs, struct extra *);
 
 #endif
