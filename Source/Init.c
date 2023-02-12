@@ -24,7 +24,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <assert.h>
-#include "../Libraries/json.h"
+#include "../Libraries/mjson.h"
 
 /* This function returns a structure of pointers to the various assets.  Since this is a structure of pointers, it's small enough that we can just return it directly.
  *
@@ -50,9 +50,12 @@ struct assptrs load_assptrs(void)
 		FILE * file = fopen(name, "r");
 		fread(buf, fstatus.st_size, 1, file);
 		fclose(file);
-		json_value * tree;
-		if ((tree = json_parse(buf, fstatus.st_size)) != NULL) {
-			json_value_free(tree);
+		/* These checks are not comprehensive. */
+		if (mjson_find(buf, fstatus.st_size, "$", NULL, NULL) == MJSON_TOK_OBJECT /*
+				&& mjson_find(buf, fstatus.st_size, "$.questions", NULL, NULL) == MJSON_TOK_ARRAY
+				&& mjson_find(buf, fstatus.st_size, "$.questions[0]", NULL, NULL) == MJSON_TOK_ARRAY
+				&& mjson_find(buf, fstatus.st_size, "$.data", NULL, NULL) == MJSON_TOK_ARRAY
+				&& mjson_find(buf, fstatus.st_size, "$.data[0]", NULL, NULL) == MJSON_TOK_OBJECT */) {
 			long i = assptrs.filetotal;
 			assptrs.filenames = realloc(assptrs.filenames, sizeof (char *) * assptrs.filetotal + 1);
 			assptrs.filenames[i] = calloc(strlen(dirent->d_name) + 1, sizeof (char));

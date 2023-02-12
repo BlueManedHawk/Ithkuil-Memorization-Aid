@@ -19,13 +19,13 @@
 
 #include "SDL2/SDL_ttf.h"
 #include <stdio.h>
-#include "../Libraries/json.h"
 
 static const int screenwidth = 640, screenheight = 480;
 
 struct assptrs {
 	TTF_Font * barlow_condensed;
-	json_value * curfile;
+	char * curfile;
+	size_t curflen;
 	long filetotal;
 	/* dumbass didn't know what a vla member was 💀 */
 	char ** filenames;

@@ -27,10 +27,8 @@
 #include <limits.h>
 #include <stdio.h>
 #include <sys/stat.h>
-#include "../Libraries/json.h" // TODO:  _very_ unhappy about this
+#include "../Libraries/mjson.h"
 #include <signal.h>
-
-#define ever ;; // hehehe
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 {
@@ -57,7 +55,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 	screen->userdata = &extra;
 	SDL_Texture * screentex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, screenwidth, screenheight);
 	void * pixels; int pitch;
+#define ever ;;
 	for (ever) {
+#undef ever
 		timespec_get(&firsttime, TIME_UTC); // For throttling FPS to reduce resource usage — see end of loop.
 
 		SDL_SetRenderDrawColor(renderer, 0x28, 0x28, 0x28, 0xFF);
@@ -77,22 +77,19 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] const char ** argv)
 		SDL_RenderPresent(renderer);
 
 		if (((struct extra *)screen->userdata)->filereq >= 0) {
-			if (assptrs.curfile != NULL)
-				json_value_free(assptrs.curfile);
+			free(assptrs.curfile);
 			char fname[0b10'0000'0000] = "./Assets/";
 			strcat(fname, assptrs.filenames[((struct extra *)screen->userdata)->filereq]);
 			strcat(fname, ".json");
 			struct stat fstatus = {0};
 			stat(fname, &fstatus);
 			FILE * file = fopen(fname, "r");
-			char * buf = malloc(fstatus.st_size);
-			fread(buf, fstatus.st_size, 1, file);
+			assptrs.curfile = malloc(fstatus.st_size);
+			assptrs.curflen = fstatus.st_size;
+			fread(assptrs.curfile, fstatus.st_size, 1, file);
 			fclose(file);
-			assptrs.curfile = json_parse(buf, fstatus.st_size);
-			free(buf);
 		} else {
-			if (assptrs.curfile != NULL)
-				json_value_free(assptrs.curfile);
+			free(assptrs.curfile);  assptrs.curfile = NULL;
 		}
 		if (((struct extra *)screen->userdata)->quit) break;
 		if (((struct extra *)screen->userdata)->swap) {

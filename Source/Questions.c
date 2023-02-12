@@ -32,6 +32,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <stdint.h>
+#include "../Libraries/mjson.h"
 
 static char * question;
 static char * answers[4];
@@ -56,6 +57,8 @@ static bool cached;
 static struct buttondata * quitbutton, * backbutton, * nextq_button, * timerbuttons[3];
 static SDL_Surface * timertxt_surface, * timeleft_text;
 
+#define maxstrlenof(type) (int)ceil(sizeof (type) * CHAR_BIT * log(2) / log(10))
+
 [[gnu::cold]] static void questions_cleanup(void)
 {
 	free_button(quitbutton);
@@ -65,23 +68,21 @@ static SDL_Surface * timertxt_surface, * timeleft_text;
 		free_button(timerbuttons[i]);
 }
 
-/* This is a bit of an unintuitive interface, but i couldn't figure out how to get the type of the unnamed struct directly. */
-static signed int jsongetkey(const char * req_key, json_value * obj)
-{
-	for (register unsigned int i = 0; i < obj->u.object.length; i++)
-		if (!strcmp(req_key, obj->u.object.values[i].name))
-			return i;
-	return -1;
+static int json_arrlen(char * file, size_t filesize, char * path) {
+	char * item;  int ilen;  mjson_find(file, filesize, path, (const char **)&item, &ilen);
+	int off, proff;
+	for (off = 0, proff = 0; (off = mjson_next(item, ilen, off, &proff, NULL, NULL, NULL, NULL)) != 0;);
+	return proff;
 }
 
-[[gnu::cold]] static char * replace_substrings(json_value * file, char * str, short num)
+[[gnu::cold]] static char * replace_substrings(char * file, size_t filesize, char * str, size_t str_len, short num)
 {
-	for (register unsigned long i = 0; i < strlen(str); i++) {
+	for (register unsigned long i = 0; i <= str_len; i++) {
 		if (!strncmp(&str[i], "\xC2\x98", 2)) {
 			char * substring = NULL;
 			unsigned short y;
 			bool has_ST = false;
-			for (y = i + 2; y < strlen(str); y++) {
+			for (y = i + 2; y <= str_len; y++) {
 				if (!strncmp(&str[y], "\xC2\x9C", 2)) {
 					has_ST = true;
 					break;
@@ -92,39 +93,23 @@ static signed int jsongetkey(const char * req_key, json_value * obj)
 			substring[y - (i + 2)] = '\0';
 			if (!has_ST) {
 				errno = EINVAL;
+				free(substring);
 				return NULL;
 			}
 			y += 2; // We need to keep track of where the substring ends for later; this is the first char _after_ the string terminator.
-			signed int dataloc;
-			if ((dataloc = jsongetkey("data", file)) == -1) {
-				fprintf(stderr, "\033[31mA critical error has occurred in the function %s due to an invalid JSON file (missing the data section) being supplied to the program.  The program will crash now.  Apologies for the inconvenience.\033[m\n", __func__);
-				exit(EXIT_FAILURE);
-			}
-			int substr_loc = -1;
-			if ((substr_loc = jsongetkey(substring, file->u.object.values[dataloc].value->u.array.values[num])) == -1) {
-				errno = ENOMSG;
-				return NULL;
-			}
+			char path[maxstrlenof (short) + (y - i) + 10];  sprintf(path, "$.data[%d].%s", num, substring);
 			free(substring);
-			char * replacement;
-			switch (file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->type) {
-			case json_integer:
-				replacement = alloca(20 + 1); // maximum length of 64-bit integer + nul char
-				sprintf(replacement, "%" PRIdFAST64 "", file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->u.integer);
-				break;
-			case json_string:
-				replacement = alloca(file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->u.string.length + 1);
-				strcpy(replacement, file->u.object.values[dataloc].value->u.array.values[num]->u.object.values[substr_loc].value->u.string.ptr);
-				break;
-			default:
-			case json_null:
+			char replacement[0xFF];
+			double v;  bool ret;
+			if (!mjson_get_string(file, filesize, path, replacement, 0xFF) && !((ret = mjson_get_number(file, filesize, path, &v)), strfromd(replacement, 0xFF, "%F", v), ret)) {
 				errno = ENOMSG;
 				return NULL;
 			}
 			char * betterstring = malloc(strlen(str) + strlen(replacement) + 3);
-			str[i] = '\0';  strcpy(betterstring, str);  str[i] = '\xC2';  //I tried to replace this line with a call to `strncpy()` instead, but it ended up causing, of all thing, _memory corruption_, somehow.  So uh.  Don't do that, i guess?
+			str[i] = '\0';  strcpy(betterstring, str);  str[i] = '\xC2';  /* I tried to replace this line with a call to `strncpy()` instead, but it ended up causing memory corruption. */
 			strcat(betterstring, replacement);
 			strcat(betterstring, &str[y]);
+			//free(replacement);
 			return betterstring;
 		}
 	}
@@ -163,48 +148,40 @@ void questions_render(SDL_Surface * screen, struct assptrs assptrs)
 	if (loadnext) [[clang::unlikely]] {
 		__label__ fukitol;
 fukitol:
-		__attribute__((unused));  // I wasn't able to get this attribute to apply to the label with the standard syntax.
-		int questions_loc = jsongetkey("questions", assptrs.curfile);
-		if (questions_loc == -1) {
-			fprintf(stderr, "\033[31mA catastrophic error has occurred in the function %s due to an invalid JSON file (missing the questions) being supplied to the program.  The program will crash now.  Apologies for the inconvenience.\033[m\n", __func__);
-			exit(EXIT_FAILURE);
-		}
-		int selection_loc = rand() % (assptrs.curfile->u.object.values[questions_loc].value->u.array.length - 1);
-		free(question);
-		question = malloc(assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[0]->u.string.length + 1);
-		strcpy(question, assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[0]->u.string.ptr);
+		__attribute__ ((unused));  // I wasn't able to get this attribute to apply to the label with the standard syntax.
+		int question_selection = rand() % json_arrlen(assptrs.curfile, assptrs.curflen, "$.questions");
+		const int question_len = 0xFF;  /* MAGICALLY ARBITRARY */
+		free(question);  question = malloc(question_len);
+		char path[maxstrlenof (short) + 17];  sprintf(path, "$.questions[%d][0]", question_selection);
+		mjson_get_string(assptrs.curfile, assptrs.curflen, path, question, question_len);
+		sprintf(path, "$.questions[%d][1]", question_selection);
 		for (register short i = 0; i < 4; i++) {
 			free(answers[i]);
-			answers[i] = malloc(assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.length + 1);
-			strcpy(answers[i], assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.ptr);
+			answers[i] = malloc(question_len);
+			mjson_get_string(assptrs.curfile, assptrs.curflen, path, answers[i], question_len);
 		}
 		correct_ans_num = rand() % (sizeof answers / sizeof answers[0] - 1);
 		int x;
-		int data_loc = jsongetkey("data", assptrs.curfile);
-		if (data_loc == -1) {
-			fprintf(stderr, "\033[31mA critical error has occurred in the function %s due to an invalid JSON file (missing the data section) being supplied to the program.  The program will crash now.  Apologies for the inconvenience.\033[m\n", __func__);
-			exit(EXIT_FAILURE);
-		}
 		for (register int i = 0; i < 4; i++) {
 			char cur_ans[strlen(answers[i]) + 2];  strcpy(cur_ans, answers[i]);
 			while (true) {
 				free(answers[i]);
-				x = rand() % (assptrs.curfile->u.object.values[data_loc].value->u.array.length - 1);
-				if ((answers[i] = replace_substrings(assptrs.curfile, cur_ans, x)) == NULL)
+				x = rand() % json_arrlen(assptrs.curfile, assptrs.curflen, "$.data");
+				if ((answers[i] = replace_substrings(assptrs.curfile, assptrs.curflen, cur_ans, strlen(cur_ans), x)) == NULL)
 					continue;
 				else
 					break;
 			}
 		}
-		char * q = alloca(strlen(question) + 1);  strcpy(q, question);
-		char * cor_ans = alloca(assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.length + 1);  strcpy(cor_ans, assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.ptr);
+		char q[strlen(question) + 1];  strcpy(q, question);
+		char cor_ans[question_len];  mjson_get_string(assptrs.curfile, assptrs.curflen, path, cor_ans, question_len);
 		while (true) {
 			free(question);
 			free(answers[correct_ans_num]);
-			x = rand() % (assptrs.curfile->u.object.values[data_loc].value->u.array.length - 1);
-			if ((question = replace_substrings(assptrs.curfile, q, x)) == NULL)
+			x = rand() % json_arrlen(assptrs.curfile, assptrs.curflen, "$.data");
+			if ((question = replace_substrings(assptrs.curfile, assptrs.curflen, q, strlen(q), x)) == NULL)
 				continue;
-			if ((answers[correct_ans_num] = replace_substrings(assptrs.curfile, cor_ans, x)) == NULL)
+			if ((answers[correct_ans_num] = replace_substrings(assptrs.curfile, assptrs.curflen, cor_ans, strlen(cor_ans), x)) == NULL)
 				continue;
 			else
 				break;
@@ -213,11 +190,11 @@ fukitol:
 			for (register int j = i + 1; j < 4; j++)
 				if (!strcmp(answers[i], answers[j])) {
 					register int toreplace = correct_ans_num == j ? i : j;
-					char incor_ans[assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.length + 1];  strcpy(incor_ans, assptrs.curfile->u.object.values[questions_loc].value->u.array.values[selection_loc]->u.array.values[1]->u.string.ptr);
+					char incor_ans[question_len];  mjson_get_string(assptrs.curfile, assptrs.curflen, path, incor_ans, question_len);
 					while (true) {
 						free(answers[toreplace]);
-						x = rand() % (assptrs.curfile->u.object.values[data_loc].value->u.array.length - 1);
-						if ((answers[toreplace] = replace_substrings(assptrs.curfile, incor_ans, x)) == NULL)
+						x = rand() % json_arrlen(assptrs.curfile, assptrs.curflen, "$.data");
+						if ((answers[toreplace] = replace_substrings(assptrs.curfile, assptrs.curflen, incor_ans, strlen(incor_ans), x)) == NULL)
 							continue;
 						else
 							break;
@@ -297,21 +274,7 @@ fukitol:
 	}
 
 	/* This doesn't work, but it appears to be harmless. */
-	char txt[
-#if SIG_ATOMIC_WIDTH == 16
-		5
-#elif SIG_ATOMIC_WIDTH == 32
-		10
-#elif SIG_ATOMIC_WIDTH == 64
-		20
-#elif SIG_ATOMIC_WIDTH == 128
-		39
-#elif SIG_ATOMIC_WIDTH == 256
-		78
-#else
-		ceil(SIG_ATOMIC_WIDTH * log(2) / log(10))
-#endif
-	];  sprintf(txt, "%d", alarm_left);
+	char txt[maxstrlenof (sig_atomic_t)];  sprintf(txt, "%d", alarm_left);
 	SDL_FreeSurface(timeleft_text);
 	TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
 	TTF_SetFontSize(assptrs.barlow_condensed, 16);

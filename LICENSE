@@ -18,4 +18,4 @@ This project makes use of Barlow Condensed, licensed by the Barlow Project Autho
 
 This project makes use of SDL 2.0.20 and SDL_ttf 2.20.0, both licensed by Sam Lantinga under separate instances of the zlib license, available to view heres:  https://www.libsdl.org/license.php and https://github.com/libsdl-org/SDL_ttf/blob/main/LICENSE.txt.
 
-This project makes use of json-parser, licensed by the json-parser authors under the BSD 2-Clause license, available to view here:  https://github.com/json-parser/json-parser/blob/master/LICENSE.
+This project makes use of mjson, licensed by Cesanta Software Limited under the MIT license, available to view here:  https://github.com/cesanta/mjson/blob/master/LICENSE.

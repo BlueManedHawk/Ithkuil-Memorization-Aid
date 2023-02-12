@@ -1,10 +1,10 @@
 {
 	"questions":[
-		["What is the meaning of the \u0098name\u009c aspect?", "\u0098desc\u009c"],
-		["Which aspect means \"\u0098desc\u009c\"?", "\u0098name\u009c"],
-		["What is the Vn for the \u0098name\u009c aspect?", "\u0098vn\u009c"],
-		["Which aspect has a Vn of \u0098vn\u009c?", "\u0098name\u009c"],
-		["Which category is the \u0098name\u009c aspect in?", "\u0098cat\u009c"]
+		["What is the meaning of the name aspect?", "desc"],
+		["Which aspect means \"desc\"?", "name"],
+		["What is the Vn for the name aspect?", "vn"],
+		["Which aspect has a Vn of vn?", "name"],
+		["Which category is the name aspect in?", "cat"]
 	],
 	"data":[
 		{
