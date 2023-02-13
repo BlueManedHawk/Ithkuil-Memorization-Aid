@@ -25,7 +25,6 @@ CC = clang-15
 CFLAGS = -Werror -Wall -Wextra -pedantic
 CFLAGS += -Wno-gnu-binary-literal # Workaround for an issue with Clang.
 CFLAGS += -std=c2x -glldb ` sdl2-config --cflags ` -Og
-# Flags for unincluding mjson features we don't need:  CFLAGS += -DMJSON_ENABLE_PRINT=0 -DMJSON_ENABLE_BASE64=0 -DMJSON_ENABLE_RPC=0
 LDFLAGS = ` sdl2-config --libs ` -lSDL2_ttf -lm
 SRC = $(wildcard Source/*.c Libraries/*.c)
 OBJ = $(SRC:.c=.o)
@@ -37,7 +36,7 @@ Source/%.o: Source/%.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 Libraries/%.o: Libraries/%.c
-	$(CC) -c $^ -o $@
+	$(CC) -DMJSON_ENABLE_PRINT=0 -DMJSON_ENABLE_BASE64=0 -DMJSON_ENABLE_RPC=0 -c $^ -o $@
 
 release: $(OBJ)
 	$(CC) $(LDFLAGS) $^ -o "ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls.elf"

@@ -1,5 +1,7 @@
 # ëšho'hlorẓûţc hwomùaržrıtéu-erţtenļıls
 
+_NOTICE:  See the [known issues](https://github.com/BlueManedHawk/Ithkuil-Memorization-Aid#known-issues) below before using this software._
+
 This repository hosts a piece of software intended as a memorization aid for the various parts of the constructed language Ithkuil.  It is intended to be used not on its own, but as a supplementary tool within your broader learning of the language.
 
 The software works by having you select a category of the language which you wish to learn, after which it will present you with an endless series of multiple-choice questions regarding the category you selected.  You can switch to a different category at any time.
@@ -22,14 +24,7 @@ There isn't any way to install the program yet—but then again, this isn't a pr
 
 ## Known Issues
 
-These two should hopefully be fixable before release N.1.
-
-- The window is fixed at a resolution of 480p36@4:3, and can't be scaled, which may lead to serious difficulty if you're lucky enough to have a fucknormously huge monitor.  I did try to fix this once, but i was unable to reconcile the discrepancies in the apparent and actual position of the cursor.  Note that when scaling is implemented, the software is still going to render at 480p36@4:3 so as to reduce resource usage.
-- There's a piece of code that's copied in both the menu code and the questions code that should be in its own bit.
-- Probably some bits could do with a little optimization.
-
-The rest of these will probably need to wait.
-
+- When the window is scaled, the position of the cursor is slightly wrong.  This is poorly concealed by sometimes hiding the real cursor and showing a fake one where the software thinks it is, but the problem is still definitely there and can still lead to confusion.  (It should be noted that the 480p@4:3 resolution of the window regardless of scaling is _not_ an issue, and completely intentional.)
 - The timer doesn't show how much time remains, only the total amount of time.
 - The glyph ẓ doesn't exist in the font we're using, so we use ż instead.
 - The current color scheme is Gruvbox, which 0. is uncertaintly defined, Ⓑ doesn't map perfectly to sixteen colors (a fact used by this very software), and IV.) is _warm_.  All of these problems need to be fixed.
@@ -38,6 +33,9 @@ The rest of these will probably need to wait.
 - This isn't strictly an issue, but it may be funny to sometimes have wrong answers be selected from categories other than the current one.
 - SDL may not have been the best choice.
 - The executable produced is considered to be a shared library instead of…well, the executable that it is; this requires a redundant shell script.
+- There's a piece of code that's copied in both the menu code and the questions code that should be in its own bit.
+- Probably some bits could do with a little optimization.
+- Quite frankly, the code is just an absolute disaster in some places, even for what is not a professional project.  Certain places could definitely do with some cleanup.
 - Perhaps most obviously, the software currently only has files for the aspects and the cases.  Digitizing the entire language will take a long time (though admittedly most of that will be from the lexicon and the VxCs affixes), and more importantly, figuring out what the best way to organize everything is will be its own ball of fish. Eventually, this might even evolve into a completely separate project.
 
 ## Asset Format

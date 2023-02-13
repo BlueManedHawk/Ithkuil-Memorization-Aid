@@ -124,7 +124,7 @@ void alarm_handler([[maybe_unused]] int dummy)
 		alarm(1);
 }
 
-void questions_render(SDL_Surface * screen, struct assptrs assptrs, struct extra * extra)
+void questions_render(SDL_Surface * screen, struct assptrs assptrs, struct extra * extra, SDL_Window * window)
 {
 	SDL_Event e = {0};
 	bool click = false;
@@ -144,6 +144,21 @@ void questions_render(SDL_Surface * screen, struct assptrs assptrs, struct extra
 	SDL_Point clickloc;
 	SDL_PumpEvents();
 	click = (SDL_GetMouseState(&clickloc.x, &clickloc.y) & SDL_BUTTON_LMASK) ? true : false;
+	int w, h;  SDL_GetWindowSize(window, &w, &h);
+	SDL_Rect correct_rect = (w >= 4/3 * h) ? (SDL_Rect){(w - (h * 4/3)) / 2, 0, h * 4/3, h} : (SDL_Rect){0, (h - (w * 3/4)) / 2, w, w * 3/4};
+	if (clickloc.x < correct_rect.x || clickloc.y > correct_rect.x + correct_rect.w || clickloc.y < correct_rect.y || clickloc.y > correct_rect.y + correct_rect.h) {
+		SDL_ShowCursor(true);
+		clickloc.x = screenwidth;
+		clickloc.y = screenheight;
+	} else {
+		SDL_ShowCursor(false);
+		if (correct_rect.x > 0)
+			clickloc.x -= correct_rect.x;
+		else
+			clickloc.y -= correct_rect.y;
+		clickloc.x /= correct_rect.w * 4/3 / screenwidth;
+		clickloc.y /= correct_rect.h * 4/3 / screenheight;
+	}
 
 	if (loadnext) [[clang::unlikely]] {
 		__label__ fukitol;
@@ -381,6 +396,11 @@ fukitol:
 	dest.y = timerbuttons[2]->pos[1]; dest.x = timerbuttons[2]->pos[0] - timertxt_surface->w - 6;
 	dest.w = timertxt_surface->w; dest.h = timertxt_surface->h;
 	SDL_BlitSurface(timertxt_surface, NULL, screen, &dest);
+
+	SDL_Rect mptr = {.x = clickloc.x, .y = clickloc.y, .w = 8, .h = 4};
+	SDL_FillRect(screen, &mptr, SDL_MapRGBA(screen->format, 0xFB, 0x49, 0x34, 0xFF));
+	mptr.w = 4;  mptr.h = 8;
+	SDL_FillRect(screen, &mptr, SDL_MapRGBA(screen->format, 0xFB, 0x49, 0x34, 0xFF));
 
 	if (extra->quit)
 		questions_cleanup();
