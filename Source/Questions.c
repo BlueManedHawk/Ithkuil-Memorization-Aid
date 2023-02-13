@@ -312,18 +312,20 @@ fukitol:
 				dest.w = rw->w; dest.h = rw->h;
 				SDL_BlitSurface(rw, NULL, response_surface, &dest);
 			} else {
-				short i = rand() % (sizeof wrong / sizeof wrong[0] - 1);
-				TTF_SetFontSize(assptrs.barlow_condensed, 16);
-				rw = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, wrong[i], (SDL_Color){0xFB, 0x49, 0x34, 0xFF});
-				dest.x = (screenwidth - rw->w) / 2;
-				dest.w = rw->w; dest.h = rw->h;
-				SDL_BlitSurface(rw, NULL, response_surface, &dest);
+				if (selected != 5) {  /* i.e. the user didn't just skip the question */
+					short i = rand() % (sizeof wrong / sizeof wrong[0] - 1);
+					TTF_SetFontSize(assptrs.barlow_condensed, 16);
+					rw = TTF_RenderUTF8_Blended(assptrs.barlow_condensed, wrong[i], (SDL_Color){0xFB, 0x49, 0x34, 0xFF});
+					dest.x = (screenwidth - rw->w) / 2;
+					dest.w = rw->w; dest.h = rw->h;
+					SDL_BlitSurface(rw, NULL, response_surface, &dest);
+				}
 
 				SDL_FreeSurface(rw);
 				char * right_ans_txt = malloc(17 + strlen(answers[correct_ans_num]) + 1);
 				sprintf(right_ans_txt, "Correct answer:  %s", answers[correct_ans_num]);
 				TTF_SetFontSize(assptrs.barlow_condensed, 14);
-				dest.y += rw->h;
+				dest.y += (rw == NULL) ? 0 : rw->h;
 				TTF_SetFontWrappedAlign(assptrs.barlow_condensed, TTF_WRAPPED_ALIGN_CENTER);
 				rw = TTF_RenderUTF8_Blended_Wrapped(assptrs.barlow_condensed, right_ans_txt, (SDL_Color){0xEB, 0xDB, 0xB2, 0xFF}, screenwidth);
 				dest.x = (screenwidth - rw->w) / 2;
